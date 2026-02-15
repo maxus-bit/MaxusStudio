@@ -40,7 +40,6 @@ import { LoadingScreenComponent } from '../../shared/components/loading-screen/l
   encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  // Используем Observable из AppState для реактивности через getter
   get user$() { return this.appState.user$; }
   get userData$() { return this.appState.userData$; }
   get activeSection$() { return this.appState.activeSection$; }

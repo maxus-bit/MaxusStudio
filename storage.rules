@@ -3,16 +3,12 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     
-    // 1. Папка для изображений, которые загружает пользователь (например, референсы)
-    // Разрешаем чтение и запись только владельцу.
+    // 1. Папка для изображений, которые загружает пользователь
     match /users/{userId}/{allPaths=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
     // 2. Папка для сгенерированных картинок
-    // Cloud Function сохраняет сюда картинки, а клиент должен иметь право их читать и удалять.
-    // Запись клиенту здесь не нужна, так как пишет Cloud Function (Admin SDK обходит правила),
-    // но если вы хотите, чтобы клиент мог удалять, нужно разрешение на write (delete).
     match /generated/{userId}/{allPaths=**} {
       allow read: if request.auth != null && request.auth.uid == userId;
       allow write: if request.auth != null && request.auth.uid == userId;

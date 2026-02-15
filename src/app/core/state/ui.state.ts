@@ -2,14 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-// UI состояние (модальные окна, уведомления и т.д.)
 export interface UIState {
   showAuthModal: boolean;
   showEmailVerificationModal: boolean;
   showPasswordResetModal: boolean;
   showSettingsModal: boolean;
   showSubscriptionExpiredModal: boolean;
-  sidebarOpen: boolean; // для мобильных устройств
+  sidebarOpen: boolean;
   toastMessages: Array<{ id: string; message: string; type: 'info' | 'success' | 'error' }>;
 }
 

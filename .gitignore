@@ -42,7 +42,6 @@ firestore-debug.log
 ui-debug.log
 firebase.json.backup
 
-# --- SECURITY & SECRETS (КРИТИЧНО!) ---
 # Ключи и сертификаты
 *.key
 *.pem
@@ -53,6 +52,9 @@ firebase.json.backup
 .env
 .env.local
 .env.*.local
+functions/.env
+functions/.env.local
+functions/.env.*.local
 
 # JSON ключи от Google Cloud / Firebase Service Accounts
 service-account.json
@@ -64,8 +66,5 @@ service-account.json
 !ng-package.json
 !tslint.json
 
-# Секретные environment файлы Angular
-# Оставляем только environment.ts (пустой шаблон),
-# а environment.development.ts (с ключами) игнорируем
 src/environments/environment.development.ts
 src/environments/environment.local.ts

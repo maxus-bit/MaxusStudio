@@ -11,7 +11,7 @@ export interface Chat {
   timestamp: string | number;
   isPinned?: boolean;
   customName?: string;
-  title?: string; // Для совместимости с sidebar
+  title?: string;
   messages: ChatMessage[];
   createdAt?: number;
   updatedAt?: number;

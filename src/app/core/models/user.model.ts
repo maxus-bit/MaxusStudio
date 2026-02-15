@@ -11,9 +11,9 @@ export interface UserData {
   credits: number;
   subscriptionType?: 'free' | 'basic' | 'pro' | 'ultra';
   subscriptionExpiry?: number;
-  lastLogin?: string; // ISO string для совместимости с оригиналом
-  createdAt: number | string; // Может быть timestamp или ISO string
+  lastLogin?: string;
+  createdAt: number | string;
   updatedAt: number;
-  photoBase64?: string; // Для аватара пользователя
+  photoBase64?: string;
 }
 

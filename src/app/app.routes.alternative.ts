@@ -14,7 +14,7 @@ export const routesAlternative: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [authGuard] // Защита маршрута
+    canActivate: [authGuard]
   },
   { path: '**', redirectTo: '' }
 ];
