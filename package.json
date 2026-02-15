@@ -30,6 +30,7 @@
     "@angular/cli": "^18.0.0",
     "@angular/compiler-cli": "^18.0.0",
     "@types/node": "^20.10.0",
+    "firebase-tools": "^13.35.1",
     "typescript": "~5.4.0"
   }
 }
