@@ -1,0 +1,201 @@
+<header class="header">
+    <div class="logo">
+        <img src="assets/img/MaxusLogo.png" alt="logo" fetchpriority="high"> Maxus
+    </div>
+    
+    <div class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="nav-container" [class.active]="isMobileMenuOpen">
+        <nav class="nav">
+            <a (click)="scrollTo('home')">Home</a>
+            <a (click)="scrollTo('collection')">Collection</a>
+            <a (click)="scrollTo('plans')">Plans</a>
+            <a (click)="scrollTo('contacts')">Contacts</a>
+        </nav>
+        <div class="auth-buttons">
+            <button class="btn btn-outline" (click)="scrollTo('plans')">Plans</button>
+            <button class="btn btn-primary" (click)="openAuthModal()">Sign up</button>
+        </div>
+    </div>
+</header>
+
+<!-- Auth Modals -->
+<app-auth-modal
+  *ngIf="showAuthModal"
+  (close)="closeAuthModal()"
+  (emailVerificationSent)="onEmailVerificationSent($event)"
+  (passwordResetSent)="onPasswordResetSent($event)"
+></app-auth-modal>
+
+<app-email-verification-modal
+  [visible]="showEmailVerificationModal"
+  [email]="verificationEmail"
+  [isNewUser]="isNewUser"
+  (close)="closeEmailVerificationModal()"
+></app-email-verification-modal>
+
+<app-password-reset-modal
+  [visible]="showPasswordResetModal"
+  [email]="resetEmail"
+  (close)="closePasswordResetModal()"
+></app-password-reset-modal>
+
+<!-- Payment Modal -->
+<app-payment-confirmation-modal
+  [visible]="showPaymentModal"
+  [plan]="selectedPlan"
+  [isAnnual]="isAnnual"
+  [processing]="paymentProcessing"
+  (close)="closePaymentModal()"
+  (confirm)="confirmPayment()"
+></app-payment-confirmation-modal>
+
+<section class="hero" id="home">
+    <h1>Stop Guessing. Start Directing.<br>
+        <span class="highlight">AI Thumbnails</span><br>
+        Under Your Control
+    </h1>
+    <p class="subtitle">
+        Combine the speed of Generative AI with the precision of manual design.
+        Transform rough doodles into professional 4K images.
+    </p>
+    <button class="btn btn-glow" (click)="openAuthModal()">Start Creating</button>
+</section>
+
+<section class="showcase" id="collection">
+    <h2>Thumbnails AI</h2>
+
+    <div class="marquee-wrapper">
+        <div class="marquee">
+            <div class="track track-left">
+                <img src="assets/img/Thum10.webp" alt="Thumbnail" decoding="async">
+                <img src="assets/img/Thum7.webp" alt="Thumbnail" decoding="async">
+                <img src="assets/img/Thum19.webp" alt="Thumbnail" decoding="async">
+                <img src="assets/img/Thum8.webp" alt="Thumbnail" decoding="async">
+                <img src="assets/img/Thum5.webp" alt="Thumbnail" decoding="async">
+                <img src="assets/img/Thum6.webp" alt="Thumbnail" decoding="async">
+                <img src="assets/img/Thum2.webp" alt="Thumbnail" decoding="async">
+                <img src="assets/img/Thum4.webp" alt="Thumbnail" decoding="async">
+                <img src="assets/img/Thum3.webp" alt="Thumbnail" decoding="async">
+                <img src="assets/img/Thum20.webp" alt="Thumbnail" decoding="async">
+            </div>
+        </div>
+
+        <div class="marquee">
+            <div class="track track-right">
+                <img src="assets/img/Thum11.webp" alt="Thumbnail" loading="lazy" decoding="async">
+                <img src="assets/img/Thum17.webp" alt="Thumbnail" loading="lazy" decoding="async">
+                <img src="assets/img/Thum8.webp" alt="Thumbnail" loading="lazy" decoding="async">
+                <img src="assets/img/Thum16.webp" alt="Thumbnail" loading="lazy" decoding="async">
+                <img src="assets/img/Thum12.webp" alt="Thumbnail" loading="lazy" decoding="async">
+                <img src="assets/img/Thum13.webp" alt="Thumbnail" loading="lazy" decoding="async">
+                <img src="assets/img/Thum18.webp" alt="Thumbnail" loading="lazy" decoding="async">
+                <img src="assets/img/Thum14.webp" alt="Thumbnail" loading="lazy" decoding="async">
+                <img src="assets/img/Thum15.webp" alt="Thumbnail" loading="lazy" decoding="async">
+                <img src="assets/img/Thum9.webp" alt="Thumbnail" loading="lazy" decoding="async">
+            </div>
+        </div>
+    </div>
+
+    <div class="center-btn">
+        <button class="btn btn-glow" (click)="openAuthModal()">Start Creating</button>
+    </div>
+</section>
+
+<section class="pricing" id="plans">
+    <h2>Subscribe</h2>
+
+    <div class="billing-toggle">
+        <span class="toggle-label">Monthly</span>
+        <label class="toggle-switch">
+            <input type="checkbox" id="billingToggle" [(ngModel)]="isAnnual" (change)="toggleBilling()">
+            <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-label">
+            Annual <span class="discount-badge">-15%</span>
+        </span>
+    </div>
+
+    <div class="pricing-container">
+        <div class="card basic">
+            <h3>BASIC</h3>
+            <p class="desc">Usually plan for you</p>
+            <div class="price-wrapper">
+                <div class="price" [class.monthly-price]="!isAnnual" [class.annual-price]="isAnnual">${{ isAnnual ? '8.50' : '10' }}<span>/mo</span></div>
+                <div class="full-year" *ngIf="isAnnual">Full Year: $102</div>
+            </div>
+            <button class="btn btn-full" (click)="selectPlan('basic')">Get BASIC</button>
+            <ul class="features">
+                <li><i class="fa-solid fa-check-circle"></i> Thumbnails</li>
+                <li><i class="fa-solid fa-check-circle"></i> 80 Generations</li>
+                <li class="disabled"><i class="fa-solid fa-circle-xmark"></i> Latest Update</li>
+                <li class="disabled"><i class="fa-solid fa-circle-xmark"></i> All</li>
+            </ul>
+        </div>
+
+        <div class="card pro">
+            <div class="badge">Most Popular</div>
+            <h3>PRO</h3>
+            <p class="desc">Unlocks full power</p>
+            <div class="price-wrapper">
+                <div class="price" [class.monthly-price]="!isAnnual" [class.annual-price]="isAnnual">${{ isAnnual ? '21.25' : '25' }}<span>/mo</span></div>
+                <div class="full-year" *ngIf="isAnnual">Full Year: $255</div>
+            </div>
+            <button class="btn btn-purple" (click)="selectPlan('pro')">Get PRO</button>
+            <ul class="features">
+                <li><i class="fa-solid fa-check-circle"></i> Thumbnails Pro</li>
+                <li><i class="fa-solid fa-check-circle"></i> 200 Generations</li>
+                <li><i class="fa-solid fa-check-circle"></i> Latest Update</li>
+                <li class="disabled"><i class="fa-solid fa-circle-xmark"></i> All</li>
+            </ul>
+        </div>
+
+        <div class="card ultra">
+            <h3>ULTRA</h3>
+            <p class="desc">Open ALL subscribe</p>
+            <div class="price-wrapper">
+                <div class="price" [class.monthly-price]="!isAnnual" [class.annual-price]="isAnnual">${{ isAnnual ? '42.50' : '50' }}<span>/mo</span></div>
+                <div class="full-year" *ngIf="isAnnual">Full Year: $510</div>
+            </div>
+            <button class="btn btn-full" (click)="selectPlan('ultra')">Get ULTRA</button>
+            <ul class="features">
+                <li><i class="fa-solid fa-check-circle"></i> Thumbnails Pro</li>
+                <li><i class="fa-solid fa-check-circle"></i> 1000 Generations</li>
+                <li><i class="fa-solid fa-check-circle"></i> Latest Update</li>
+                <li><i class="fa-solid fa-check-circle"></i> All</li>
+            </ul>
+        </div>
+    </div>
+
+    <p class="pricing-note">
+        At the end of the subscription period, all unused generations will be cancelled.
+        The same applies to annual plans.
+    </p>
+</section>
+
+<footer class="footer" id="contacts">
+    <div class="footer-content">
+        <div class="footer-logo">
+            <img src="assets/img/MaxusWhite.png" alt="logo" loading="lazy"> Maxus
+        </div>
+
+        <div class="copyright">
+            <p>Creating Thumbnails fast, high quality and for your teams</p>
+            <p>2025 Maxus AI</p>
+        </div>
+
+        <div class="socials">
+            <a href="#"><i class="fa-brands fa-discord"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-telegram"></i></a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <a [routerLink]="['/privacy']" class="privacy">Privacy Policy</a>
+    </div>
+</footer>

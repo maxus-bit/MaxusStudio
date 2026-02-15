@@ -1,0 +1,24 @@
+<div class="modal-overlay" *ngIf="visible" (click)="onClose()">
+  <div class="modal-window email-verification-modal" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="onClose()">&times;</button>
+    <div class="modal-header">
+      <h2>Check Your Email</h2>
+    </div>
+    <div class="modal-body email-verification-body">
+      <div class="verification-content">
+        <p class="verification-text">
+          We've sent a verification link to <strong class="verification-email">{{ email }}</strong>
+        </p>
+        <p class="verification-hint">
+          Click the link in the email to verify your account.
+        </p>
+      </div>
+      <div class="verification-actions">
+        <button class="btn btn-outline full-width" (click)="onResendVerification()">
+          <i class="fa-solid fa-paper-plane"></i> Resend Email
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,38 @@
+<div class="gallery-section">
+  <div class="section-header">
+    <h1 class="section-title">My Creations</h1>
+    <p class="section-subtitle">Your personal history of generations</p>
+  </div>
+
+  <div class="gallery-grid" *ngIf="allImages.length > 0">
+    <div 
+      *ngFor="let image of allImages" 
+      class="gallery-item"
+      (click)="onImageClick(image)"
+    >
+      <img [src]="image.imageUrl" [alt]="image.prompt">
+      <div class="gallery-item-overlay">
+        <p class="gallery-item-prompt">{{ image.prompt }}</p>
+      </div>
+      <div class="gallery-item-actions">
+        <button class="action-btn download-btn" (click)="onDownload($event, image)" title="Download">
+          <i class="fa-solid fa-download"></i>
+        </button>
+        <button class="action-btn delete-btn" (click)="onDelete($event, image)" title="Delete">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="allImages.length === 0">
+    <div class="empty-icon">
+      <i class="fa-regular fa-folder-open"></i>
+    </div>
+    <h3>No creations yet</h3>
+    <p>Go to Home and create your first masterpiece!</p>
+    <button class="primary-btn pulse-btn" (click)="onStartCreating()">
+      Start Creating <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </button>
+  </div>
+</div>

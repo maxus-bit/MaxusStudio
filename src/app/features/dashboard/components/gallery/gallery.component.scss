@@ -1,0 +1,176 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.gallery-section {
+  padding: 40px;
+  min-height: 100%;
+}
+
+.section-header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: $text-white;
+}
+
+.section-subtitle {
+  color: $text-grey;
+  font-size: 1rem;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.gallery-item {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: $border-radius;
+  overflow: hidden;
+  cursor: pointer;
+  transition: $transition;
+  border: 1px solid $border-color;
+
+  &:hover {
+    transform: scale(1.02);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+    .gallery-item-overlay {
+      opacity: 1;
+    }
+    
+    .gallery-item-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  
+  &:hover img {
+    transform: scale(1.1);
+  }
+}
+
+.gallery-item-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  padding: 15px;
+  opacity: 0;
+  transition: $transition;
+  pointer-events: none; /* Allow clicks to pass through if needed, but text selection might be wanted */
+  z-index: 1;
+}
+
+.gallery-item-prompt {
+  color: $text-white;
+  font-size: 0.85rem;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gallery-item-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 10;
+}
+
+.action-btn {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: $text-white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  @include flex-center;
+  cursor: pointer;
+  transition: $transition;
+  backdrop-filter: blur(4px);
+
+  &:hover {
+    background: $text-white;
+    color: $bg-color;
+    transform: scale(1.1);
+  }
+  
+  i {
+    font-size: 0.9rem;
+  }
+}
+
+.delete-btn:hover {
+  background: $primary-red;
+  color: $text-white;
+  border-color: $primary-red;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  @include flex-center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: $text-grey;
+  margin-bottom: 20px;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  color: $text-white;
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: $text-grey;
+  margin-bottom: 20px;
+}
+
+.primary-btn {
+  @include button-primary;
+  padding: 15px 30px;
+  font-size: 1rem;
+  @include flex-center;
+  gap: 10px;
+}
+
+.pulse-btn {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px $primary-red;
+  }
+  50% {
+    box-shadow: 0 0 25px $primary-red;
+  }
+}

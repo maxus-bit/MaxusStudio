@@ -1,0 +1,133 @@
+.card {
+  background-color: var(--card-bg);
+  padding: 30px;
+  border-radius: 20px;
+  width: 300px;
+  text-align: left;
+  border: 1px solid #333;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary-red);
+  }
+
+  &.pro {
+    border: 2px solid var(--primary-purple);
+    box-shadow: 0 0 20px rgba(157, 0, 255, 0.3);
+    transform: scale(1.05);
+    z-index: 2;
+
+    &:hover {
+      transform: scale(1.08) translateY(-5px);
+      box-shadow: 0 0 40px rgba(157, 0, 255, 0.6);
+      border-color: #bd4dff;
+      z-index: 10;
+    }
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+
+  .desc {
+    font-size: 0.8rem;
+    color: var(--text-grey);
+    margin-bottom: 20px;
+  }
+
+  .price-wrapper {
+    margin-bottom: 20px;
+  }
+
+  .price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+
+    span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text-grey);
+    }
+  }
+
+  .full-year {
+    font-size: 0.9rem;
+    color: var(--text-grey);
+    margin-top: 5px;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &.btn-full {
+      background-color: var(--primary-red);
+      color: white;
+
+      &:hover {
+        background-color: #ff4d6a;
+        box-shadow: 0 5px 15px rgba(255, 42, 77, 0.4);
+      }
+    }
+
+    &.btn-purple {
+      background-color: var(--primary-purple);
+      color: white;
+
+      &:hover {
+        background-color: #b53eff;
+        box-shadow: 0 5px 15px rgba(157, 0, 255, 0.5);
+      }
+    }
+  }
+
+  .features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      i {
+        color: var(--primary-red);
+      }
+
+      &.disabled {
+        color: #444;
+
+        i {
+          color: #444;
+        }
+      }
+    }
+  }
+
+  .badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-purple);
+    padding: 5px 20px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+}
+

@@ -1,0 +1,2790 @@
+/* =========================================
+   1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И СБРОС (VARIABLES & RESET)
+   ========================================= */
+:root {
+    --bg-color: #050505;
+    /* Основной фон */
+    --sidebar-bg: #0a0a0a;
+    /* Фон меню */
+    --card-bg: #111111;
+    /* Фон карточек */
+    --primary-red: #ff2a4d;
+    /* Акцент */
+    --primary-purple: #9d00ff;
+    /* Pro Акцент */
+    --text-white: #ffffff;
+    --text-grey: #888888;
+    --border-color: #222;
+}
+
+/* =========================================
+   LOADING SCREEN (Skeleton)
+   ========================================= */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loading-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.loading-skeleton {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 0;
+}
+
+.skeleton-sidebar {
+    width: 280px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+}
+
+.skeleton-sidebar::before {
+    content: '';
+    width: 100%;
+    height: 12px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.skeleton-sidebar::after {
+    content: '';
+    width: 100%;
+    height: 12px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite 0.2s;
+    border-radius: 6px;
+    display: block;
+}
+
+.skeleton-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    position: relative;
+}
+
+.skeleton-header {
+    height: 80px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 40px;
+    gap: 20px;
+}
+
+.skeleton-badge {
+    width: 100px;
+    height: 35px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 20px;
+}
+
+.skeleton-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 50%;
+}
+
+.skeleton-content {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+}
+
+.skeleton-content::before {
+    content: '';
+    width: 300px;
+    height: 40px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+    display: block;
+}
+
+.skeleton-content::after {
+    content: '';
+    width: 200px;
+    height: 30px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite 0.3s;
+    border-radius: 8px;
+    display: block;
+}
+
+.skeleton-input {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 80px);
+    max-width: 800px;
+    height: 80px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 20px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Обертка всего приложения */
+.app-wrapper {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    /* Важно для мобильного меню */
+    opacity: 1 !important;
+    transition: opacity 0.3s ease;
+}
+
+.app-wrapper.loaded {
+    opacity: 1 !important;
+}
+
+/* =========================================
+   2. САЙДБАР И МЕНЮ (SIDEBAR)
+   ========================================= */
+.sidebar {
+    width: 280px;
+    height: 100vh;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    flex-shrink: 0;
+    z-index: 100;
+    /* Подняли Z-index */
+    transition: transform 0.3s ease;
+    /* Добавили плавность для мобилки */
+    overflow-y: auto;
+    /* Добавляем скролл если контент не помещается */
+}
+
+.logo-area {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-red);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Навигация */
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: var(--text-grey);
+    padding: 12px 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.menu-item.active {
+    background: rgba(255, 42, 77, 0.1);
+    color: var(--primary-red);
+}
+
+/* Секция истории (в сайдбаре) */
+.history-section {
+    margin-top: 40px;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.history-title {
+    font-size: 0.75rem;
+    color: #444;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.history-item {
+    padding: 8px 10px;
+    color: var(--text-grey);
+    font-size: 0.85rem;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 2px solid transparent;
+}
+
+/* --- СТИЛИ ДЛЯ АКТИВНОГО ЧАТА В ИСТОРИИ --- */
+/* Активный чат в меню */
+.history-item.active {
+    background-color: rgba(255, 42, 77, 0.1);
+    /* Светлее фона */
+    color: white !important;
+    /* Белый текст */
+    padding-left: 10px !important;
+    /* Отступ */
+}
+
+/* Убираем прозрачность или меняем цвет при наведении на активный */
+.history-item.active:hover {
+    background-color: #222;
+}
+
+.history-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.history-item.pinned {
+    border-left-color: var(--primary-red);
+    background: rgba(255, 42, 77, 0.05);
+}
+
+.history-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.history-options-btn {
+    opacity: 0;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.history-item:hover .history-options-btn {
+    opacity: 1;
+}
+
+.sidebar-bottom {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+
+
+/* --- КНОПКА NEW CHAT --- */
+.new-chat-wrapper {
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #1a1a1a;
+    /* Разделитель */
+}
+
+.new-chat-btn {
+    width: 100%;
+    background-color: #111;
+    border: 1px solid #333;
+    color: #888888;
+    padding: 12px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.new-chat-btn i {
+    color: var(--primary-red);
+}
+
+.new-chat-btn:hover {
+    border-color: var(--primary-red);
+    background-color: rgba(255, 42, 77, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.new-chat-btn:active {
+    transform: scale(0.98);
+}
+
+
+
+/* =========================================
+   3. ГЛАВНАЯ ОБЛАСТЬ И ШАПКА (MAIN CONTENT)
+   ========================================= */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.top-header {
+    height: 80px;
+    display: flex;
+    justify-content: flex-end;
+    /* По умолчанию справа */
+    align-items: center;
+    padding: 0 40px;
+    flex-shrink: 0;
+}
+
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.credits-badge {
+    border: 1px solid var(--primary-red);
+    color: var(--primary-red);
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: #222;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid #333;
+}
+
+/* Выпадающее меню профиля */
+.profile-wrapper {
+    position: relative;
+}
+
+/* Выпадающее меню профиля */
+.user-dropdown {
+    /* Убедимся, что оно скрыто по умолчанию */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    pointer-events: none;
+    /* Чтобы не кликалось, пока скрыто */
+
+    /* Позиционирование */
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 220px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 1000;
+    /* Поверх всего */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s ease;
+}
+
+.user-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: all;
+    /* Теперь можно кликать */
+}
+
+.dropdown-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.dropdown-close:hover {
+    background: #333;
+    color: white;
+}
+
+.dropdown-email {
+    font-size: 0.85rem;
+    color: #aaa;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 5px;
+
+    /* ВАЖНО: Обрезаем длинную почту с троеточием */
+    white-space: nowrap;
+    /* Текст в одну строку */
+    overflow: hidden;
+    /* Скрываем, что вылезает */
+    text-overflow: ellipsis;
+    /* Добавляем "..." в конце */
+}
+
+.dropdown-item {
+    width: 100%;
+    padding: 10px;
+    background: none;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: #333;
+    border-radius: 5px;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #333;
+    margin: 5px 0;
+}
+
+
+/* =========================================
+   4. ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК (TABS)
+   ========================================= */
+.content-section {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.content-section.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+    flex-shrink: 0;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.section-header p {
+    color: var(--text-grey);
+}
+
+/* Billing Toggle */
+.billing-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.toggle-label {
+    font-size: 1rem;
+    color: var(--text-white);
+    font-weight: 500;
+}
+
+.discount-badge {
+    background: var(--primary-red);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #333;
+    transition: 0.3s;
+    border-radius: 30px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked+.toggle-slider {
+    background-color: var(--primary-red);
+}
+
+.toggle-switch input:checked+.toggle-slider:before {
+    transform: translateX(30px);
+}
+
+
+/* =========================================
+   5. СЕКЦИЯ HOME (ГЕНЕРАТОР)
+   ========================================= */
+#section-home.content-section {
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    height: 100%;
+}
+
+#section-home.content-section.active {
+    display: flex;
+}
+
+#section-home app-chat-feed {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#section-home app-prompt-box {
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+.generator-container {
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+}
+
+.generator-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.prompt-box-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+
+.prompt-box-wrapper.blocked {
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
+}
+
+.prompt-box-lock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 15px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    gap: 15px;
+}
+
+.prompt-box-lock-overlay .lock-icon {
+    font-size: 3rem;
+    color: var(--primary-red);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.prompt-box-lock-overlay .lock-message {
+    color: var(--text-white);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.prompt-box {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.prompt-box textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    resize: none;
+    outline: none;
+    height: 60px;
+}
+
+.prompt-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #222;
+}
+
+.generate-btn {
+    background: var(--primary-red);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.generate-btn:hover {
+    transform: scale(1.05);
+}
+
+.tool-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.tool-btn:hover {
+    color: white;
+}
+
+/* --- ГРАДИЕНТНЫЙ ТЕКСТ ДЛЯ ИМЕНИ --- */
+#userName {
+    /* 1. Задаем градиент (от белого к серому) */
+    background: linear-gradient(130deg, #ffffff 20%, #555552 100%);
+
+    /* 2. Обрезаем фон по контуру букв */
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    /* 3. Делаем сам текст прозрачным, чтобы было видно фон */
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+
+    /* Опционально: чуть жирнее, чтобы градиент был заметнее */
+    font-weight: 800;
+}
+
+
+/* =========================================
+   6. ГАЛЕРЕЯ И КАРТОЧКИ (CREATIONS)
+   ========================================= */
+
+/* 🔥 ИСПРАВЛЕНИЕ: Добавили #myCreationsGrid и уменьшили размер */
+.image-grid,
+#myCreationsGrid,
+.gallery-grid {
+    display: grid;
+    /* minmax(220px, 1fr) - это размер карточки.
+       Чем меньше число (например 200px), тем меньше картинки.
+       Было 280px (слишком большие), стало 220px (аккуратные). */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    width: 100%;
+    padding-bottom: 50px;
+    /* Отступ снизу, чтобы не прилипало */
+}
+
+.gallery-card {
+    background: #111;
+    border-radius: 12px;
+    /* Чуть меньше скругление */
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 16/9;
+    /* Сохраняем пропорции превью */
+    border: 1px solid #222;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-red);
+    box-shadow: 0 10px 25px rgba(255, 42, 77, 0.15);
+}
+
+.gallery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 15px;
+}
+
+.gallery-card:hover .card-overlay {
+    opacity: 1;
+}
+
+.prompt-text {
+    font-size: 0.85rem;
+    /* Текст чуть меньше */
+    color: #e0e0e0;
+    margin-bottom: 35px;
+    /* Место для кнопок */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    /* Максимум 2 строки текста */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* --- КНОПКИ НА КАРТОЧКЕ --- */
+.card-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 5;
+}
+
+.gallery-card:hover .card-actions {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-actions button {
+    width: 34px;
+    /* Кнопки чуть компактнее */
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: white;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Кнопка скачивания */
+.card-actions .download-btn:hover {
+    background-color: #fff;
+    color: #000;
+    transform: scale(1.1);
+}
+
+/* Кнопка удаления */
+.card-actions .delete-btn:hover {
+    background-color: #ff2a4d;
+    color: white;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 15px rgba(255, 42, 77, 0.6);
+}
+
+.card-actions button:active {
+    transform: scale(0.95);
+}
+
+
+
+
+/* =========================================
+   7. СЕКЦИЯ PLANS (ТАРИФЫ)
+   ========================================= */
+#section-plans {
+    align-items: center;
+}
+
+#section-plans .section-header {
+    text-align: center;
+    width: 100%;
+}
+
+.pricing-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding-top: 0;
+    margin-top: -16px !important;
+}
+
+.pricing-note {
+    max-width: 800px;
+    margin: 40px auto 0;
+    padding: 0 20px;
+    color: var(--text-grey);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* Карточка тарифа */
+.card {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 20px;
+    width: 300px;
+    text-align: left;
+    border: 1px solid #333;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary-red);
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.desc {
+    font-size: 0.8rem;
+    color: var(--text-grey);
+    margin-bottom: 20px;
+}
+
+.price-wrapper {
+    margin-bottom: 20px;
+}
+
+.price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.price span {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-grey);
+}
+
+.full-year {
+    font-size: 0.9rem;
+    color: var(--text-grey);
+    margin-top: 5px;
+}
+
+
+/* Список функций */
+.features {
+    list-style: none;
+}
+
+.features li {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.features i {
+    color: var(--primary-red);
+}
+
+.features li.disabled,
+.features li.disabled i {
+    color: #444;
+}
+
+/* Кнопки внутри тарифов */
+.btn-full,
+.btn-purple {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 20px;
+    color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-full {
+    background-color: var(--primary-red);
+}
+
+.btn-full:hover {
+    background-color: #ff4d6a;
+    box-shadow: 0 5px 15px rgba(255, 42, 77, 0.4);
+}
+
+.btn-purple {
+    background-color: var(--primary-purple);
+}
+
+.btn-purple:hover {
+    background-color: #b53eff;
+    box-shadow: 0 5px 15px rgba(157, 0, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+/* --- СТИЛИ ДЛЯ PRO КАРТЫ --- */
+.card.pro {
+    border: 2px solid var(--primary-purple);
+    box-shadow: 0 0 20px rgba(157, 0, 255, 0.3);
+    transform: scale(1.05);
+    /* Немного больше остальных */
+    z-index: 2;
+    overflow: visible;
+    /* Чтобы бейджик не обрезался */
+}
+
+.card.pro:hover {
+    transform: scale(1.08) translateY(-5px);
+    box-shadow: 0 0 40px rgba(157, 0, 255, 0.6);
+    border-color: #bd4dff;
+    z-index: 10;
+}
+
+.badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-purple);
+    padding: 5px 20px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* =========================================
+   8. ОБЩИЕ СТИЛИ КНОПОК (GLOBAL BUTTONS)
+   ========================================= */
+.btn {
+    padding: 10px 25px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+.btn-primary {
+    background-color: var(--primary-red);
+    color: var(--text-white);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary-red);
+    color: var(--text-white);
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-red);
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 42, 77, 0.5);
+}
+
+.btn-glow {
+    background-color: var(--primary-red);
+    color: white;
+    padding: 15px 40px;
+    font-size: 1rem;
+    border-radius: 30px;
+    box-shadow: 0 0 15px var(--primary-red);
+    margin-top: 20px;
+}
+
+.btn-glow:hover {
+    background-color: #ff4d6a;
+    box-shadow: 0 0 25px var(--primary-red);
+    transform: scale(1.05);
+}
+
+/* =========================================
+   9. КОНТЕКСТНОЕ МЕНЮ (ПКМ)
+   ========================================= */
+.context-menu {
+    position: fixed;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 5px;
+    border-radius: 8px;
+    width: 160px;
+    display: none;
+    z-index: 9999;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.context-menu.active {
+    display: block;
+}
+
+.ctx-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ctx-item:hover {
+    background: #333;
+    color: white;
+    border-radius: 4px;
+}
+
+.ctx-item.delete:hover {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+}
+
+.ctx-divider {
+    height: 1px;
+    background: #333;
+    margin: 4px 0;
+}
+
+
+/* =========================================
+   10. SCROLLBAR CUSTOMIZATION (КРАСИВЫЙ СКРОЛЛ)
+   ========================================= */
+
+/* Делаем полосу прокрутки тонкой и темной для всего сайта */
+::-webkit-scrollbar {
+    width: 8px;
+    /* Ширина скролла */
+    height: 8px;
+    /* Высота (для горизонтального) */
+}
+
+/* Фон под скроллом (трек) */
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+/* Сам ползунок */
+::-webkit-scrollbar-thumb {
+    background-color: #333;
+    /* Темно-серый */
+    border-radius: 4px;
+    /* Скругленные края */
+}
+
+/* Ползунок при наведении */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Отступы для секций (кроме home) */
+.content-section:not(#section-home) {
+    padding: 40px;
+    padding-bottom: 100px;
+    overflow-x: hidden;
+}
+
+/* Фикс для контейнера цен, чтобы PRO карта не вызывала скролл */
+.pricing-container {
+    padding: 40px;
+    /* Даем место для анимации увеличения */
+    margin: 0 -20px;
+    /* Компенсация, чтобы визуально было по центру */
+    width: calc(100% + 40px);
+}
+
+
+
+/* =========================================
+   5. СЕКЦИЯ HOME (РЕЖИМ ЧАТА) - FIXED
+   ========================================= */
+
+/* Главный контейнер раздела */
+#section-home.chat-mode {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* На всю высоту экрана */
+    overflow: hidden;
+    /* Скрываем скролл родителя */
+    position: relative;
+    padding: 0;
+
+    /* 🔥 FIX: Важно! Убираем центрирование родителя.
+       Мы будем управлять положением через flex-grow у детей */
+    justify-content: flex-end;
+    align-items: stretch;
+}
+
+/* 1. ПРИВЕТСТВИЕ (Hi User) */
+.chat-welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 80px;
+    animation: fadeIn 0.5s ease;
+    width: 100%;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+.chat-welcome h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.chat-welcome h2 {
+    font-size: 1.5rem;
+    color: var(--text-grey);
+    font-weight: 400;
+}
+
+/* 2. ЛЕНТА ЧАТА */
+.chat-feed {
+    /* 🔥 FIX: Тоже растягивается, если активно */
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 30px 10%;
+    padding-bottom: 20px;
+    display: flex;
+    /* Изменено: теперь всегда flex, управляется через *ngIf в компоненте */
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    scroll-behavior: smooth;
+}
+
+/* Класс active добавляется JS-ом (если используется) или просто display: block */
+.chat-feed.active {
+    display: flex;
+}
+
+/* Скроллбар для чата */
+.chat-feed::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-feed::-webkit-scrollbar-thumb {
+    background-color: #333;
+    border-radius: 3px;
+}
+
+
+/* =========================================
+   FIXED PROMPT BOX STYLES
+   ========================================= */
+
+/* Контейнер ввода (прижат к низу) */
+.prompt-container-fixed {
+    margin-top: auto;
+    flex-shrink: 0;
+    width: 100%;
+    padding: 20px 40px 30px 40px;
+    background: var(--bg-color);
+    display: flex;
+    align-items: stretch;
+    position: relative;
+}
+
+/* Сама коробка */
+.prompt-box {
+    width: 100%;
+    max-width: 700px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+/* 2. ТЕКСТОВОЕ ПОЛЕ */
+#promptInput {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    resize: none;
+    outline: none;
+    height: 50px;
+    /* Фиксированная высота */
+}
+
+/* 3. НИЖНЯЯ ПАНЕЛЬ (КНОПКИ) */
+.prompt-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #2a2a2a;
+}
+
+/* Группа инструментов слева */
+.tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Обертка кнопки (для позиционирования меню) */
+.tool-wrapper {
+    position: relative;
+    /* Меню будет позиционироваться относительно этого блока */
+    display: flex;
+    align-items: center;
+}
+
+/* Кнопки инструментов */
+.tool-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    color: #aaa;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.tool-btn:hover,
+.tool-btn.active {
+    background: #333;
+    color: white;
+}
+
+/* 4. ВЫПАДАЮЩЕЕ МЕНЮ (ИСПРАВЛЕНО) */
+.settings-dropdown {
+    position: absolute;
+    bottom: 45px;
+    /* Поднимаем НАД кнопкой */
+    left: 0;
+    width: 220px;
+    background: #111;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 999;
+    /* Поверх всего */
+
+    /* Скрыто по умолчанию */
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Класс для отображения */
+.settings-dropdown.show {
+    display: flex;
+}
+
+.dropdown-header {
+    font-size: 0.75rem;
+    color: #666;
+    padding: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.model-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #1a1a1a;
+    border: 1px solid transparent;
+}
+
+.model-option:hover {
+    background: #222;
+}
+
+.model-option.active {
+    border-color: #ff2a4d;
+    background: rgba(255, 42, 77, 0.05);
+}
+
+.model-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.model-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.model-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.model-badge {
+    font-size: 0.7rem;
+}
+
+.model-badge.free {
+    color: #888;
+}
+
+.model-badge.pro {
+    color: #9d00ff;
+}
+
+/* =========================================
+   СТИЛИ СООБЩЕНИЙ (MESSENGER STYLE)
+   ========================================= */
+
+/* --- ОБЩАЯ СТРОКА СООБЩЕНИЯ --- */
+.msg-row {
+    display: flex;
+    width: 100%;
+    animation: fadeIn 0.3s ease;
+}
+
+/* --- 1. ЮЗЕР (СПРАВА) --- */
+.msg-row.user {
+    justify-content: flex-end;
+}
+
+.msg-bubble {
+    background-color: var(--primary-red);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 18px 18px 4px 18px;
+    max-width: 70%;
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+/* --- 2. AI (СЛЕВА) --- */
+.msg-row.ai {
+    justify-content: flex-start;
+}
+
+/* Карточка с картинкой */
+.ai-image-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 500px;
+    width: 100%;
+    border: 1px solid #333;
+    background-color: #000;
+}
+
+.ai-image-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Кнопки на картинке */
+.ai-actions-overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.ai-image-card:hover .ai-actions-overlay {
+    opacity: 1;
+}
+
+.action-circle-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-circle-btn:hover {
+    background: var(--primary-red);
+}
+
+/* Анимация загрузки */
+.ai-loading-bubble {
+    color: #888;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+
+/* --- MODAL STYLES --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.open {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-window {
+    background: #111;
+    border: 1px solid #333;
+    width: 900px;
+    height: 80%;
+    max-height: 700px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Модальное окно настроек - упрощенный дизайн */
+#settingsModal .modal-window {
+    width: 600px !important;
+    max-width: 600px !important;
+    height: auto !important;
+    max-height: 90vh !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+/* Header */
+.modal-header {
+    padding: 20px 30px;
+    border-bottom: 1px solid #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    color: white;
+    transform: rotate(90deg);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: 0.2s;
+    z-index: 10;
+}
+
+.modal-close:hover {
+    color: var(--primary-red);
+}
+
+/* Body Layout */
+.modal-body {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Content Area */
+.settings-content {
+    flex-grow: 1;
+    padding: 40px;
+    overflow-y: auto;
+    width: 100%;
+    min-height: 0;
+    /* Позволяет flex-контейнеру правильно работать с overflow */
+}
+
+.settings-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.settings-content::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+.settings-content::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+}
+
+.settings-content::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+/* Sections */
+.settings-section {
+    margin-bottom: 40px;
+}
+
+.settings-section:last-child {
+    margin-bottom: 0;
+}
+
+.settings-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+/* Profile Edit */
+.profile-edit-area {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.avatar-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    border: 2px solid #333;
+    object-fit: cover;
+}
+
+.avatar-large img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.hint-text {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 25px;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.95rem;
+    outline: none;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary-red);
+    background: #111;
+}
+
+.form-group input::placeholder {
+    color: #666;
+}
+
+.form-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 10px;
+}
+
+.form-actions .btn {
+    flex: 1;
+}
+
+/* Danger Zone */
+.danger-zone {
+    border: 1px solid rgba(255, 42, 77, 0.3);
+    background: rgba(255, 42, 77, 0.05);
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.danger-zone h3 {
+    color: var(--primary-red);
+    border-bottom: 1px solid rgba(255, 42, 77, 0.2);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.danger-zone p {
+    color: #aaa;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.btn-sm {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.modal-actions .btn {
+    flex: 0 0 auto;
+    min-width: 100px;
+}
+
+/* Стили для модальных окон Delete и Rename */
+#deleteChatModal .modal-window,
+#renameChatModal .modal-window,
+#deleteAccountModal .modal-window,
+#deleteImageModal .modal-window {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    max-height: 90vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#deleteChatModal .modal-header,
+#renameChatModal .modal-header,
+#deleteAccountModal .modal-header,
+#deleteImageModal .modal-header {
+    padding: 24px 30px;
+    border-bottom: 1px solid #222;
+}
+
+#deleteChatModal .modal-header h2,
+#renameChatModal .modal-header h2,
+#deleteAccountModal .modal-header h2,
+#deleteImageModal .modal-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+#deleteChatModal .modal-body,
+#renameChatModal .modal-body,
+#deleteAccountModal .modal-body,
+#deleteImageModal .modal-body {
+    display: block;
+    height: auto;
+    padding: 24px 30px;
+    overflow: visible;
+}
+
+#deleteChatModal .modal-body p,
+#deleteAccountModal .modal-body p,
+#deleteImageModal .modal-body p {
+    color: #aaa;
+    margin-bottom: 24px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+#renameChatModal .form-group,
+#deleteAccountModal .form-group {
+    margin-bottom: 24px;
+}
+
+#renameChatModal .form-group input,
+#deleteAccountModal .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+#renameChatModal .form-group input:focus,
+#deleteAccountModal .form-group input:focus {
+    border-color: var(--primary-red);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+#renameChatModal .form-group input::placeholder,
+#deleteAccountModal .form-group input::placeholder {
+    color: #666;
+}
+
+#deleteChatModal .modal-actions,
+#renameChatModal .modal-actions,
+#deleteAccountModal .modal-actions,
+#deleteImageModal .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 0;
+}
+
+#deleteChatModal .btn-outline,
+#renameChatModal .btn-outline,
+#deleteAccountModal .btn-outline,
+#deleteImageModal .btn-outline {
+    background: transparent;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+#deleteChatModal .btn-outline:hover,
+#renameChatModal .btn-outline:hover,
+#deleteAccountModal .btn-outline:hover,
+#deleteImageModal .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #444;
+}
+
+#deleteChatModal .btn-danger,
+#renameChatModal .btn-danger,
+#deleteAccountModal .btn-danger,
+#deleteImageModal .btn-danger {
+    background: var(--primary-red);
+    border: 1px solid var(--primary-red);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+#deleteChatModal .btn-danger:hover,
+#renameChatModal .btn-danger:hover,
+#deleteAccountModal .btn-danger:hover,
+#deleteImageModal .btn-danger:hover {
+    background: #ff4d6a;
+    border-color: #ff4d6a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 42, 77, 0.3);
+}
+
+.btn-danger {
+    background: transparent;
+    border: 1px solid var(--primary-red);
+    color: var(--primary-red);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-danger:hover {
+    background: var(--primary-red);
+    color: white;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: #222;
+    margin: 30px 0;
+}
+
+
+
+
+
+
+/* --- 1. PREVIEW AREA (ИСПРАВЛЕНО) --- */
+.image-preview-area {
+    display: flex;
+    gap: 10px;
+
+    /* 🔥 По умолчанию: скрыто полностью (без отступов) */
+    padding: 0;
+    max-height: 0;
+    opacity: 0;
+
+    overflow-x: auto;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Плавная анимация */
+    border-bottom: 1px solid transparent;
+}
+
+/* 🔥 Класс добавляется JS-ом: блок раскрывается */
+.image-preview-area.has-images {
+    padding: 15px 15px 15px 15px;
+    /* Отступы появляются только здесь */
+    max-height: 100px;
+    /* Достаточно места для картинки */
+    opacity: 1;
+    border-bottom-color: #333;
+    /* Появляется полоска */
+    margin-bottom: 10px;
+    /* Отступ до текста */
+}
+
+/* Карточка превью */
+.preview-item {
+    position: relative;
+    /* Важно для позиционирования картинки внутри */
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #000;
+    /* Фон, если картинка не загрузится */
+    animation: fadeInScale 0.3s ease;
+}
+
+/* 🔥 ИСПРАВЛЕНИЕ: Картинка растягивается абсолютно */
+.preview-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Обрезаем лишнее, сохраняя пропорции */
+    z-index: 1;
+}
+
+/* Кнопка удаления */
+.preview-remove {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    z-index: 2;
+    /* Поверх картинки */
+    transition: 0.2s;
+}
+
+.preview-item:hover .preview-remove {
+    opacity: 1;
+}
+
+.preview-remove:hover {
+    background: var(--primary-red);
+    transform: scale(1.1);
+}
+
+
+
+
+/* =========================================
+   TOAST NOTIFICATIONS (УВЕДОМЛЕНИЯ)
+   ========================================= */
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    min-width: 300px;
+    background: #1a1a1a;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    animation: slideIn 0.3s ease forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Полоска статуса слева */
+.toast::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+/* Типы уведомлений */
+.toast.error::before {
+    background: #ff2a4d;
+}
+
+/* Красный */
+.toast.error i {
+    color: #ff2a4d;
+}
+
+.toast.success::before {
+    background: #00ff88;
+}
+
+/* Зеленый */
+.toast.success i {
+    color: #00ff88;
+}
+
+.toast.info::before {
+    background: #0088ff;
+}
+
+/* Синий */
+.toast.info i {
+    color: #0088ff;
+}
+
+/* Анимации */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.toast-message {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+
+/* --- СТИЛИ ДЛЯ КНОПОК ГАЛЕРЕИ (ОБНОВЛЕНИЕ) --- */
+
+/* Кнопка скачивания */
+.card-actions .download-btn:hover {
+    background-color: #fff;
+    color: #000;
+    transform: scale(1.1);
+}
+
+/* Кнопка удаления */
+.card-actions .delete-btn:hover {
+    background-color: #ff2a4d;
+    /* Красный акцент */
+    color: white;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 15px rgba(255, 42, 77, 0.6);
+}
+
+
+
+/* --- СТИЛИ ДЛЯ ПУСТОЙ ГАЛЕРЕИ --- */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.empty-icon {
+    font-size: 80px;
+    color: #222;
+    /* Очень темный серый, чтобы не отвлекал */
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    font-size: 24px;
+    color: #fff;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.empty-state p {
+    color: #888;
+    font-size: 16px;
+    margin-bottom: 30px;
+    max-width: 400px;
+}
+
+/* Кнопка "Start Creating" */
+.primary-btn {
+    background: #ff2a4d;
+    /* Ваш фирменный красный */
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    font-size: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 42, 77, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 42, 77, 0.5);
+}
+
+.primary-btn:active {
+    transform: translateY(0);
+}
+
+/* =========================================
+   CHECKOUT MODAL - используем стили из лендинга
+   ========================================= */
+#checkoutModal .modal-window {
+    background-color: var(--card-bg);
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid #333;
+    position: relative;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    height: auto;
+    display: block;
+    flex-direction: column;
+    overflow: visible;
+}
+
+#checkoutModal.modal-overlay.open .modal-window {
+    transform: translateY(0);
+}
+
+#checkoutModal .modal-header {
+    text-align: center;
+    margin-bottom: 30px;
+    display: block;
+    padding: 0;
+    border-bottom: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#checkoutModal .modal-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+#checkoutModal .modal-header p {
+    color: var(--text-grey);
+    font-size: 0.9rem;
+}
+
+#checkoutModal .modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--text-grey);
+    font-size: 2rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#checkoutModal .modal-close:hover {
+    color: var(--primary-red);
+}
+
+/* =========================================
+   ДОПОЛНЕНИЯ ДЛЯ АДАПТИВА (КНОПКИ И МЕДИА)
+   ========================================= */
+
+/* Кнопка "Закрыть меню" внутри сайдбара (скрыта на ПК) */
+.mobile-close-btn {
+    display: none;
+    /* Скрыта по умолчанию */
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 1.5rem;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+/* Кнопка "Бургер" в шапке (скрыта на ПК) */
+.mobile-menu-btn {
+    display: none;
+    /* Скрыта по умолчанию */
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    margin-right: auto;
+    cursor: pointer;
+}
+
+.mobile-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    margin-right: auto;
+    cursor: pointer;
+}
+
+/* Затемнение фона */
+.mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px);
+    z-index: 999;
+    opacity: 1;
+    pointer-events: all;
+    transition: 0.3s;
+}
+
+.mobile-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* МЕДИА-ЗАПРОСЫ
+   Срабатывают только на экранах уже 768px (планшеты и телефоны)
+*/
+@media (max-width: 768px) {
+
+    /* Внутри @media (max-width: 768px) */
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        /* Прижимаем к левому краю */
+        width: 85%;
+        max-width: 300px;
+        background-color: var(--sidebar-bg);
+        z-index: 1000;
+        /* ВАЖНО: Больше, чем у .prompt-container-fixed (у него 100) */
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+
+        /* Скрываем сдвигом влево на свою ширину */
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar.open {
+        /* Возвращаем на место */
+        transform: translateX(0);
+    }
+
+    .sidebar.active {
+        /* Возвращаем на место */
+        transform: translateX(0);
+    }
+
+    /* Показываем кнопку закрытия внутри меню */
+    .mobile-close-btn {
+        display: block;
+    }
+
+    /* ШАПКА: Показываем бургер */
+    .top-header {
+        padding: 0 15px;
+        justify-content: space-between;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .mobile-toggle-btn {
+        display: block;
+    }
+
+    /* КОНТЕНТ: Уменьшаем отступы */
+    .content-section {
+        padding: 20px 15px 120px;
+    }
+
+    /* ЧАТ: Шрифты и отступы поменьше */
+    .chat-welcome h1 {
+        font-size: 2rem;
+    }
+
+    .chat-feed {
+        padding: 10px 5%;
+    }
+
+    .msg-bubble {
+        max-width: 90%;
+        font-size: 0.95rem;
+    }
+
+    .prompt-container-fixed {
+        padding: 15px 15px 20px;
+    }
+
+    .prompt-box {
+        padding: 10px;
+    }
+
+    /* ГАЛЕРЕЯ: Делаем в 1 колонку на узких экранах */
+    .image-grid,
+    #myCreationsGrid,
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+        gap: 15px;
+    }
+
+    /* МОДАЛКИ: На весь экран, убираем скругления */
+    .modal-window {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        max-height: none;
+    }
+
+    /* Модальное окно настроек на мобильных - полноэкранное */
+    #settingsModal .modal-window {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+    }
+
+    .modal-header {
+        padding: 15px 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .modal-body {
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .settings-content {
+        padding: 20px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .settings-section {
+        margin-bottom: 30px;
+    }
+
+    .settings-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .profile-edit-area {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .avatar-large {
+        width: 70px;
+        height: 70px;
+        font-size: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-actions {
+        margin-top: 25px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .form-actions .btn {
+        flex: 1;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+
+    .danger-zone {
+        padding: 20px;
+        margin-bottom: 0;
+    }
+
+    .btn-danger {
+        width: 100%;
+    }
+
+    /* ТАРИФЫ: Вертикально друг под другом */
+    .pricing-container {
+        width: 100%;
+        margin: 0;
+        padding: 20px 0;
+        flex-direction: column;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .card.pro {
+        transform: scale(1);
+    }
+
+    .billing-toggle {
+        margin-bottom: 30px;
+    }
+
+    .pricing-note {
+        font-size: 0.85rem;
+        margin-top: 30px;
+        padding: 0 15px;
+    }
+
+    .toggle-label {
+        font-size: 0.9rem;
+    }
+
+    /* Адаптивные стили для модальных окон Delete и Rename */
+    #deleteChatModal .modal-window,
+    #renameChatModal .modal-window,
+    #deleteAccountModal .modal-window,
+    #deleteImageModal .modal-window {
+        width: calc(100% - 40px) !important;
+        max-width: 500px !important;
+        height: auto !important;
+        max-height: 90vh !important;
+        border-radius: 20px !important;
+        margin: 20px !important;
+    }
+
+    #deleteChatModal .modal-header,
+    #renameChatModal .modal-header,
+    #deleteAccountModal .modal-header,
+    #deleteImageModal .modal-header {
+        padding: 20px !important;
+    }
+
+    #deleteChatModal .modal-header h2,
+    #renameChatModal .modal-header h2,
+    #deleteAccountModal .modal-header h2,
+    #deleteImageModal .modal-header h2 {
+        font-size: 1.3rem !important;
+    }
+
+    #deleteChatModal .modal-body,
+    #renameChatModal .modal-body,
+    #deleteAccountModal .modal-body,
+    #deleteImageModal .modal-body {
+        padding: 20px !important;
+    }
+
+    #deleteChatModal .modal-actions,
+    #renameChatModal .modal-actions,
+    #deleteAccountModal .modal-actions,
+    #deleteImageModal .modal-actions {
+        flex-direction: row !important;
+        gap: 10px !important;
+        width: 100% !important;
+        margin-top: 0 !important;
+    }
+
+    #deleteChatModal .modal-actions .btn,
+    #renameChatModal .modal-actions .btn,
+    #deleteAccountModal .modal-actions .btn,
+    #deleteImageModal .modal-actions .btn {
+        flex: 1 !important;
+        min-width: auto !important;
+        padding: 12px 16px !important;
+        font-size: 0.95rem !important;
+    }
+
+    #renameChatModal .form-group input,
+    #deleteAccountModal .form-group input {
+        font-size: 16px !important;
+        /* Предотвращает зум на iOS */
+        padding: 14px 16px !important;
+    }
+}
+
+/* Subscription Expired Modal Styles */
+.subscription-expired-modal {
+    max-width: 500px !important;
+}
+
+.subscription-expired-body {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.expired-icon {
+    font-size: 4rem;
+    color: var(--primary-red);
+    margin-bottom: 25px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.expired-content {
+    margin-bottom: 30px;
+}
+
+.expired-text {
+    color: #aaa;
+    margin-bottom: 15px;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.expired-hint {
+    color: #888;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+.expired-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.expired-actions .btn {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.expired-actions .btn i {
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .subscription-expired-modal {
+        max-width: 90% !important;
+        padding: 30px 20px !important;
+    }
+
+    .expired-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    .expired-text {
+        font-size: 0.9rem;
+    }
+
+    .expired-hint {
+        font-size: 0.85rem;
+    }
+
+    .prompt-box-lock-overlay .lock-icon {
+        font-size: 2.5rem;
+    }
+
+    .prompt-box-lock-overlay .lock-message {
+        font-size: 1rem;
+    }
+}

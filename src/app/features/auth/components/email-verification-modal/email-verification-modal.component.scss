@@ -1,0 +1,51 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.email-verification-modal {
+  max-width: 400px !important;
+}
+
+.email-verification-body {
+  text-align: center;
+  padding: 20px;
+}
+
+.verification-content {
+  margin-bottom: 20px;
+}
+
+.verification-text {
+  color: $text-grey;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.verification-email {
+  color: $primary-red;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.verification-hint {
+  color: #888;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+.verification-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.verification-actions .btn {
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+

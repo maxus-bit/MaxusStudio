@@ -1,0 +1,484 @@
+@import '../../../../../styles/variables';
+// @import '../../../../../styles/mixins'; // Можно не импортировать, если используем прямой медиа-запрос
+
+:host {
+  display: block;
+  width: 280px;
+  height: 100vh;
+  flex-shrink: 0;
+  
+  @media (max-width: 768px) {
+    width: 0;
+    height: auto;
+  }
+}
+
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background-color: #000000;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 85%;
+    max-width: 320px;
+    background-color: #0a0a0a;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+
+    &.open {
+      transform: translateX(0);
+    }
+  }
+}
+
+.mobile-close-btn {
+  display: none;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 10;
+  
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+.logo-area {
+  padding: 0 0.5rem 2rem 0.5rem;
+  flex-shrink: 0;
+  
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    
+    // .app-logo {
+    //   width: 32px;
+    //   height: 32px;
+    // }
+    
+    .app-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ff3333; // Red color for Maxus
+    }
+  }
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-shrink: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  color: #888;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  
+  i {
+    width: 20px;
+    text-align: center;
+  }
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+  }
+  
+  &.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-weight: 500;
+  }
+}
+
+.new-chat-wrapper {
+  margin-bottom: 2rem;
+  flex-shrink: 0;
+}
+
+.new-chat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; // Changed to flex-start for alignment similar to menu items
+  gap: 0.75rem; // Matched gap with menu items
+  padding: 0.75rem 1rem; // Matched padding with menu items
+  background-color: transparent; // Make it transparent like menu items
+  color: #888; // Default color same as menu items
+  border: 1px solid rgba(255, 255, 255, 0.1); // Added a subtle border
+  border-radius: 8px;
+  font-weight: 500; // Adjusted font weight
+  font-size: 0.95rem;
+  cursor: pointer;
+  width: 100%; // Ensure it takes full width
+  transition: all 0.2s ease;
+  
+  i {
+    width: 20px;
+    text-align: center;
+    color: #ff3333; // Red accent for the plus icon
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.history-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.history-title {
+  color: #666;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-right: 4px;
+  
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+.history-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #888;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    
+    .menu-trigger {
+      opacity: 1;
+    }
+  }
+  
+  &.active {
+    background-color: rgba(255, 255, 255, 0.1); // Slightly lighter background
+    color: white;
+    font-weight: 500;
+    // Removed box-shadow and padding-left adjustments to eliminate the red line
+  }
+
+  .chat-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    flex: 1;
+    margin-right: 0.5rem;
+    
+    .pinned-icon {
+      font-size: 0.75rem;
+      color: #666;
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .history-title-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .chat-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .menu-trigger {
+    background: none;
+    border: none;
+    color: #888;
+    padding: 0.2rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+
+    &:hover {
+      color: white;
+      background-color: rgba(255,255,255,0.1);
+    }
+    
+    @media (max-width: 768px) {
+      opacity: 1;
+    }
+  }
+  
+  .context-menu {
+    display: block; 
+  }
+}
+
+.no-history {
+  padding: 1rem;
+  text-align: center;
+  color: #555;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.sidebar-bottom {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+/* --- Context Menu --- */
+.context-menu {
+  position: absolute;
+  right: 10px;
+  top: 35px;
+  background-color: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  min-width: 140px;
+  overflow: hidden;
+  animation: fadeIn 0.1s ease-out;
+
+  .context-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 0.85rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    &.delete {
+      color: #ff4d4d;
+      
+      &:hover {
+        background-color: rgba(255, 77, 77, 0.1);
+      }
+    }
+    
+    i {
+      width: 16px;
+      text-align: center;
+      display: inline-block; /* Ensure icons take up space */
+    }
+    
+    /* Стили для перечеркнутой иконки */
+    .slashed-icon {
+        position: relative;
+    }
+    
+    .slashed-icon::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 120%;
+        height: 2px;
+        background-color: currentColor;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        border-radius: 1px;
+    }
+  }
+}
+
+/* --- Modals --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  background-color: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: scaleIn 0.2s ease;
+
+  h3 {
+    margin: 0 0 1rem 0;
+    color: white;
+    font-size: 1.25rem;
+  }
+
+  p {
+    color: #aaa;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .modal-input {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    outline: none;
+
+    &:focus {
+      border-color: #ff3333;
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+
+    button {
+      padding: 0.6rem 1.25rem;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel {
+      background-color: transparent;
+      color: #aaa;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: white;
+      }
+    }
+
+    .btn-confirm {
+      background-color: #ff3333;
+      color: white;
+
+      &:hover {
+        background-color: #cc0000;
+      }
+    }
+
+    .btn-delete {
+      background-color: #d32f2f;
+      color: white;
+
+      &:hover {
+        background-color: #b71c1c;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

@@ -1,0 +1,38 @@
+<div class="modal-overlay" *ngIf="visible" (click)="onOverlayClick($event)">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3>Subscription</h3>
+      <button class="close-btn" (click)="onClose()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-content" *ngIf="plan">
+      <div class="plan-summary">
+        <div class="plan-info">
+          <span class="plan-name">{{ plan.name | uppercase }}</span>
+          <span class="plan-billing">{{ billingPeriod }} billing</span>
+        </div>
+        <div class="plan-price">
+          ${{ plan.price }}<span class="period">{{ periodShort }}</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="total-row">
+        <span>Total due today</span>
+        <span class="total-price">${{ plan.price }}</span>
+      </div>
+
+      <button class="confirm-btn" (click)="onConfirm()" [disabled]="processing">
+        <span *ngIf="!processing">Proceed to Checkout</span>
+        <span *ngIf="processing"><i class="fa-solid fa-spinner fa-spin"></i> Processing...</span>
+      </button>
+
+      <div class="secure-badge">
+        <i class="fa-solid fa-lock"></i> Secure payment via Stripe
+      </div>
+    </div>
+  </div>
+</div>

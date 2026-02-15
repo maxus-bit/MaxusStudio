@@ -1,0 +1,65 @@
+<div class="modal-overlay" (click)="close.emit()">
+  <div class="modal-window" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="close.emit()">&times;</button>
+
+    <div class="modal-header">
+      <h2>Welcome to Maxus</h2>
+      <p>Join the revolution of AI design</p>
+    </div>
+
+    <button class="btn-google" (click)="onGoogleSignIn()" [disabled]="isProcessing">
+      <i class="fa-brands fa-google"></i> Continue with Google
+    </button>
+
+    <div class="divider"><span>or continue with email</span></div>
+
+    <form class="auth-form" (ngSubmit)="$event.preventDefault()">
+      <div class="step" [class.active]="currentStep === 'email'">
+        <label>Email Address</label>
+        <input 
+          type="email" 
+          placeholder="name@example.com" 
+          [(ngModel)]="email"
+          name="email"
+          (keydown)="onEmailKeyDown($event)"
+          required
+        >
+        <button 
+          class="btn btn-primary full-width" 
+          type="button"
+          (click)="onEmailContinue()"
+          [disabled]="isProcessing"
+        >
+          Continue
+        </button>
+      </div>
+
+      <div class="step" [class.active]="currentStep === 'password'">
+        <label [id]="'passwordLabel'">Password</label>
+        <input 
+          type="password" 
+          placeholder="Min. 6 characters" 
+          [(ngModel)]="password"
+          name="password"
+          required
+        >
+        <button 
+          class="btn btn-primary full-width" 
+          type="button"
+          (click)="onAuthAction()"
+          [disabled]="isProcessing"
+        >
+          <span *ngIf="!isProcessing">Sign in / Sign up</span>
+          <span *ngIf="isProcessing">Processing...</span>
+        </button>
+
+        <a href="#" class="forgot-password-link" (click)="onForgotPassword(); $event.preventDefault()">
+          Forgot password?
+        </a>
+
+        <button class="btn-text" type="button" (click)="onBack()">Back</button>
+      </div>
+    </form>
+  </div>
+</div>
+

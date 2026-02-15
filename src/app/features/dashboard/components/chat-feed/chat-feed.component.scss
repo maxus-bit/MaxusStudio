@@ -1,0 +1,241 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.chat-feed {
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 30px 10%;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  scroll-behavior: smooth;
+  min-height: 0;
+}
+
+.chat-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  margin-bottom: auto;
+  flex-shrink: 0;
+  flex-grow: 1;
+  animation: fadeIn 0.5s ease;
+  width: 100%;
+  min-height: 0;
+
+  .welcome-content {
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+      word-break: break-word; // Add this to handle long names
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: var(--text-grey);
+      font-weight: 400;
+    }
+  }
+}
+
+.message {
+  display: flex;
+  width: 100%;
+  animation: fadeIn 0.3s ease;
+
+  &.user-message {
+    justify-content: flex-end;
+
+    .message-content {
+      background-color: #ff3333; /* 🔥 ИЗМЕНЕНИЕ: Тот самый цвет для сообщений пользователя */
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 18px 18px 4px 18px;
+      max-width: 70%;
+      font-size: 1rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+
+      p {
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+  }
+
+  &.ai-message {
+    justify-content: flex-start;
+
+    .message-content {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      max-width: 70%;
+      padding: 0;
+      word-wrap: break-word;
+    }
+  }
+}
+
+.reference-image {
+  max-width: 200px;
+  border-radius: $border-radius;
+  margin-top: 10px;
+  display: block;
+}
+
+.generated-image {
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  border-radius: $border-radius;
+  display: block;
+}
+
+.ai-image-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 500px;
+  width: 100%;
+  border: 1px solid #333;
+  background-color: #000;
+  display: block;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+.ai-actions-overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: 0.3s ease;
+  transform: translateY(10px); /* Скрываем чуть ниже */
+}
+
+/* 🔥 ИЗМЕНЕНИЕ: Показываем и поднимаем кнопки при наведении */
+.ai-image-card:hover .ai-actions-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.action-circle-btn {
+  width: 34px; /* 🔥 Чуть компактнее, как в My Creations */
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.7); /* 🔥 Более темный фон, как в My Creations */
+  color: white;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+
+  i {
+    font-size: 0.9rem;
+  }
+
+  /* 🔥 ИЗМЕНЕНИЕ: Стиль при наведении как в My Creations */
+  &:hover {
+    background: #fff;
+    color: #000;
+    transform: scale(1.1);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.ai-loading-bubble {
+  color: #888;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loading-indicator {
+  @include flex-center;
+  flex-direction: column;
+  gap: 15px;
+  padding: 30px;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid $border-color;
+    border-top: 3px solid $primary-red;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    color: $text-grey;
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Mobile styles
+@media (max-width: 768px) {
+  .chat-feed {
+    padding: 20px 5%; // Reduce padding on mobile
+  }
+
+  .chat-welcome {
+    .welcome-content {
+      h1 {
+        font-size: 1.8rem; // Smaller font for mobile
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        font-size: 1.1rem; // Smaller subtitle
+      }
+    }
+  }
+  
+  .message {
+    &.user-message .message-content,
+    &.ai-message .message-content {
+      max-width: 85%; // Allow messages to take more width on mobile
+    }
+  }
+}

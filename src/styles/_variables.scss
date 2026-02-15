@@ -1,0 +1,30 @@
+// CSS Variables
+:root {
+  --bg-color: #050505;
+  --sidebar-bg: #0a0a0a;
+  --card-bg: #111111;
+  --primary-red: #ff2a4d;
+  --primary-purple: #9d00ff;
+  --text-white: #ffffff;
+  --text-grey: #888888;
+  --border-color: #222;
+  --hover-bg: #1f1f23;
+}
+
+// SCSS Variables
+$bg-color: var(--bg-color);
+$primary-red: var(--primary-red);
+$primary-purple: var(--primary-purple);
+$text-white: var(--text-white);
+$text-grey: var(--text-grey);
+$card-bg: var(--card-bg);
+$border-color: var(--border-color);
+$hover-bg: var(--hover-bg);
+
+$font-family: 'Montserrat', sans-serif;
+$border-radius: 10px;
+$border-radius-lg: 20px;
+$transition: 0.3s ease;
+$transition-cubic: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$sidebar-bg: var(--sidebar-bg);
+

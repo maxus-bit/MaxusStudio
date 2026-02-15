@@ -1,0 +1,123 @@
+<aside class="sidebar" [class.open]="(sidebarOpen$ | async) ?? false">
+  <button class="mobile-close-btn" (click)="onClose()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <div class="logo-area">
+    <div class="logo-wrapper">
+      <span class="app-name">Maxus</span>
+    </div>
+  </div>
+
+  <nav class="menu">
+    <a 
+      href="#" 
+      class="menu-item" 
+      [class.active]="(activeSection$ | async) === 'home'"
+      (click)="onSectionChange('home'); $event.preventDefault()"
+    >
+      <i class="fa-solid fa-house"></i> Home
+    </a>
+    <a 
+      href="#" 
+      class="menu-item" 
+      [class.active]="(activeSection$ | async) === 'creations'"
+      (click)="onSectionChange('creations'); $event.preventDefault()"
+    >
+      <i class="fa-solid fa-folder"></i> My Creations
+    </a>
+    <a 
+      href="#" 
+      class="menu-item" 
+      [class.active]="(activeSection$ | async) === 'plans'"
+      (click)="onSectionChange('plans'); $event.preventDefault()"
+    >
+      <i class="fa-solid fa-credit-card"></i> Plans
+    </a>
+  </nav>
+
+  <div class="new-chat-wrapper">
+    <button class="new-chat-btn" (click)="onNewChat()">
+      <i class="fa-solid fa-plus"></i> New Chat
+    </button>
+  </div>
+
+  <div class="history-section">
+    <div class="history-title">
+      <i class="fa-solid fa-clock-rotate-left"></i> History
+    </div>
+    <div class="history-list">
+      <div 
+        *ngFor="let chat of chats" 
+        class="history-item"
+        [class.active]="chat.id === activeChatId"
+        (click)="onChatSelect(chat.id)"
+      >
+        <div class="chat-info">
+          <i *ngIf="chat.isPinned" class="fa-solid fa-thumbtack pinned-icon"></i>
+          <span class="history-title-text">{{ chat.customName || chat.title || 'Untitled Chat' }}</span>
+        </div>
+        
+        <div class="chat-actions">
+          <button class="menu-trigger" (click)="toggleMenu($event, chat.id)">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+          </button>
+          
+          <div class="context-menu" *ngIf="openMenuChatId === chat.id" (click)="$event.stopPropagation()">
+            <button class="context-item" (click)="onPinChat($event, chat)">
+              <i class="fa-solid fa-thumbtack" [class.slashed-icon]="chat.isPinned"></i>
+              {{ chat.isPinned ? 'Unpin' : 'Pin' }}
+            </button>
+            <button class="context-item" (click)="onRenameClick($event, chat)">
+              <i class="fa-solid fa-pen"></i> Rename
+            </button>
+            <button class="context-item delete" (click)="onDeleteClick($event, chat)">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="chats.length === 0" class="no-history">
+        No chat history
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <a href="#" class="menu-item" (click)="onSettings(); $event.preventDefault()">
+      <i class="fa-solid fa-gear"></i> Settings
+    </a>
+  </div>
+</aside>
+
+<!-- Rename Modal -->
+<div class="modal-overlay" *ngIf="showRenameModal">
+  <div class="modal-content">
+    <h3>Rename Chat</h3>
+    <input 
+      type="text" 
+      [(ngModel)]="renameInputValue" 
+      placeholder="Enter new chat name"
+      (keydown.enter)="confirmRename()"
+      class="modal-input"
+      autofocus
+    >
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cancelRename()">Cancel</button>
+      <button class="btn-confirm" (click)="confirmRename()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal-overlay" *ngIf="showDeleteModal">
+  <div class="modal-content delete-modal">
+    <h3>Delete Chat?</h3>
+    <p>This will permanently delete the chat and its contents.</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+      <button class="btn-delete" (click)="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>

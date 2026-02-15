@@ -1,0 +1,9 @@
+<div class="toast-container">
+  <app-toast
+    *ngFor="let toast of toasts"
+    [message]="toast.message"
+    [type]="toast.type"
+    [visible]="true"
+  ></app-toast>
+</div>
+

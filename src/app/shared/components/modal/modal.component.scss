@@ -1,0 +1,95 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85); // Немного темнее
+  z-index: 2000; // Повыше, чтобы перекрывать всё
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px); // Больше блюра
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  padding: 20px; // Отступ для мобильных
+  box-sizing: border-box;
+}
+
+.modal-window {
+  background-color: #111; // Явный цвет вместо переменной для надежности
+  width: 100%;
+  max-width: 400px; // 🔥 СДЕЛАЛ КОМПАКТНЕЕ (было 480px)
+  padding: 0; // Убираем паддинг контейнера, будем делать внутри
+  border-radius: 20px; // 🔥 ЧУТЬ МЕНЬШЕ РАДИУС (было 24px)
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  transform: translateY(20px);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; // Плавная анимация
+  overflow: hidden; // Чтобы контент не вылезал за радиус
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px; // 🔥 ЧУТЬ ВЫШЕ (было 20px)
+  right: 15px; // 🔥 ЧУТЬ ПРАВЕЕ (было 20px)
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #888;
+  width: 28px; // 🔥 МЕНЬШЕ (было 32px)
+  height: 28px; // 🔥 МЕНЬШЕ (было 32px)
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem; // 🔥 МЕНЬШЕ (было 1rem)
+  z-index: 10;
+
+  &:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+  }
+}
+
+.modal-content-wrapper {
+  padding: 30px; // 🔥 МЕНЬШЕ ОТСТУПЫ (было 40px)
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 20px; // 🔥 МЕНЬШЕ ОТСТУП (было 30px)
+
+  h2 {
+    font-size: 1.4rem; // 🔥 МЕНЬШЕ ШРИФТ (было 1.8rem)
+    margin-bottom: 5px;
+    font-weight: 700;
+  }
+}
+
+.modal-body {
+  color: #fff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}

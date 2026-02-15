@@ -1,0 +1,243 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.plans-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: $text-white;
+}
+
+.plans-header {
+  text-align: center;
+  margin-bottom: 60px;
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+
+  p {
+    color: $text-grey;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+}
+
+.billing-toggle {
+  @include flex-center;
+  gap: 15px;
+  font-weight: 500;
+
+  span {
+    color: $text-grey;
+    transition: $transition;
+
+    &.active {
+      color: $text-white;
+    }
+  }
+}
+
+.discount-badge {
+  background: $primary-red;
+  color: #ffffff !important; /* Принудительно ставим белый цвет */
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 5px;
+  font-weight: 700; /* Жирность для лучшей читаемости */
+}
+
+/* Switch Toggle Styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #333;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: $primary-red; // Changed to red as requested
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px $primary-red;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.plans-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 30px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 50px;
+}
+
+// Payment Modal Styles
+.payment-modal-content {
+  text-align: center;
+  padding: 0; // 🔥 УБРАЛ ПАДДИНГ, ТАК КАК ОН УЖЕ ЕСТЬ В MODAL-WRAPPER
+  background: transparent; // 🔥 ПРОЗРАЧНЫЙ ФОН, ЧТОБЫ БЫЛ ВИДЕН MODAL BG
+  border-radius: 0; // 🔥 УБРАЛ РАДИУС
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 25px;
+  color: $text-white;
+  font-weight: 700;
+}
+
+.plan-summary {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 25px; // 🔥 ЧУТЬ МЕНЬШЕ (было 30px)
+  border-radius: 16px;
+  margin-bottom: 25px; // 🔥 ЧУТЬ МЕНЬШЕ (было 30px)
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none; // 🔥 УБРАЛ ТЕНЬ ДЛЯ ЧИСТОТЫ
+}
+
+.plan-name {
+  font-size: 1.2rem; // 🔥 ЧУТЬ МЕНЬШЕ (было 1.4rem)
+  font-weight: 800;
+  color: $primary-red !important; // 🔥 ТЕПЕРЬ КРАСНЫЙ (было $primary-purple)
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+.plan-billing {
+  color: $text-grey;
+  font-size: 0.85rem; // 🔥 ЧУТЬ МЕНЬШЕ
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.plan-price {
+  font-size: 2.5rem; // 🔥 ЧУТЬ МЕНЬШЕ (было 2.8rem)
+  font-weight: 800;
+  color: $text-white;
+  margin-top: 10px;
+
+  span {
+    font-size: 1rem;
+    font-weight: 500;
+    color: $text-grey;
+  }
+}
+
+.payment-actions {
+  display: flex;
+  gap: 12px; // 🔥 ЧУТЬ МЕНЬШЕ (было 15px)
+  justify-content: center;
+  margin-top: 10px;
+
+  button {
+    padding: 12px 20px; // 🔥 БОЛЕЕ КОМПАКТНЫЕ КНОПКИ (было 14px 28px)
+    border-radius: 12px; // 🔥 ЧУТЬ БОЛЬШЕ СКРУГЛЕНИЕ
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-size: 0.95rem; // 🔥 ЧУТЬ МЕНЬШЕ (было 1rem)
+    flex: 1;
+    max-width: none; // 🔥 НА ВСЮ ШИРИНУ ВНУТРИ FLEX
+
+    &.cancel-btn {
+      background: transparent; // 🔥 ПРОЗРАЧНЫЙ ФОН
+      border: 1px solid rgba(255, 255, 255, 0.15); // 🔥 ТОНКАЯ РАМКА
+      color: #aaa;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: $text-white;
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    &.confirm-btn {
+      background: $primary-red; 
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 42, 77, 0.2); // 🔥 ЧУТЬ МЕНЬШЕ ТЕНЬ
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        background: #ff4d6a; 
+        box-shadow: 0 6px 20px rgba(255, 42, 77, 0.3);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+// Media queries for responsiveness
+@media (max-width: 768px) {
+  .plans-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+  
+  .payment-actions {
+    // flex-direction: column-reverse; // 🔥 УБРАЛ, ЛУЧШЕ РЯДОМ НА МОБИЛКАХ ЕСЛИ ВЛЕЗАЮТ
+    
+    button {
+      width: 100%;
+      max-width: none;
+    }
+  }
+}

@@ -1,0 +1,94 @@
+<app-loading-screen [visible]="(isLoading$ | async) ?? false" message="Loading dashboard..."></app-loading-screen>
+
+<div class="app-wrapper" *ngIf="(isLoading$ | async) === false">
+  <div class="mobile-overlay" 
+       id="mobileOverlay"
+       *ngIf="(uiState.sidebarOpen$ | async) === true"
+       (click)="uiState.closeSidebar()"></div>
+
+  <app-sidebar
+    [userId]="(user$ | async)?.uid || ''"
+    [activeChatId]="activeChatId$ | async"
+    (chatSelected)="onChatSelected($event)"
+    (newChat)="onNewChat()"
+    (sectionChanged)="onSectionChange($event)"
+    (settingsOpened)="onSettingsOpened()"
+  ></app-sidebar>
+
+  <main class="main-content">
+    <header class="top-header">
+      <button class="mobile-toggle-btn" id="mobileMenuBtn" (click)="uiState.toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <div class="user-area">
+        <div class="credits-badge">
+          <i class="fa-solid fa-bolt"></i> 
+          <span id="userCredits">{{ (appState.credits$ | async) || 0 }}</span>
+        </div>
+
+        <div class="profile-wrapper">
+          <div class="avatar" id="userAvatar" (click)="toggleUserDropdown()">
+            {{ ((user$ | async)?.email?.charAt(0) || 'M').toUpperCase() }}
+          </div>
+          <div class="user-dropdown" id="userDropdown" [class.active]="isUserDropdownOpen">
+            <button class="dropdown-close" (click)="closeUserDropdown()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="dropdown-email" id="dropdownEmail">
+              {{ (user$ | async)?.email || 'user@email.com' }}
+            </div>
+            <div class="dropdown-divider"></div>
+            <button (click)="logout(); closeUserDropdown()" class="dropdown-item logout">
+              <i class="fa-solid fa-right-from-bracket"></i> Log out
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div id="section-home" class="content-section" [class.active]="(activeSection$ | async) === 'home'">
+      <app-chat-feed
+        [messages]="(activeChatMessages$ | async) || []"
+        [isLoading]="(isGenerating$ | async) ?? false"
+        [showWelcome]="(showWelcome$ | async) ?? false"
+        [userEmail]="(user$ | async)?.email || ''"
+      ></app-chat-feed>
+
+      <app-prompt-box
+        [isLocked]="(isLocked$ | async) ?? false"
+        [currentModel]="(currentModel$ | async) || 'v1'"
+        [isGenerating]="(isGenerating$ | async) ?? false"
+        [attachedImages]="promptBoxImages"
+        [userCredits]="(appState.credits$ | async) || 0"
+        [userData]="(userData$ | async) || null"
+        (generate)="onGenerate($event)"
+        (modelChanged)="onModelChanged($event)"
+        (imageAttached)="onImageAttached($event)"
+        (imageRemoved)="onImageRemoved($event)"
+        (goToPlans)="onPromptBoxGoToPlans()"
+      ></app-prompt-box>
+    </div>
+
+    <div id="section-creations" class="content-section" [class.active]="((activeSection$ | async) ?? '') === 'creations'">
+      <app-gallery [userId]="(user$ | async)?.uid || ''"></app-gallery>
+    </div>
+
+    <div id="section-plans" class="content-section" [class.active]="((activeSection$ | async) ?? '') === 'plans'">
+      <app-plans></app-plans>
+    </div>
+  </main>
+</div>
+
+<app-settings-modal
+  [visible]="(showSettings$ | async) ?? false"
+  [userId]="(user$ | async)?.uid || ''"
+  [userData]="userData$ | async"
+  (close)="onSettingsClosed()"
+></app-settings-modal>
+
+<app-subscription-expired-modal
+  [visible]="(showSubscriptionExpiredModal$ | async) ?? false"
+  (close)="onSubscriptionExpiredClose()"
+  (goToPlans)="onSubscriptionExpiredGoToPlans()"
+></app-subscription-expired-modal>

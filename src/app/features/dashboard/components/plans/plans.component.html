@@ -1,0 +1,37 @@
+<div class="plans-container">
+  <div class="plans-header">
+    <h2>Choose your Plan</h2>
+    <p>Unlock full power of AI generation</p>
+    
+    <div class="billing-toggle">
+      <span [class.active]="!isAnnual">Monthly</span>
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="isAnnual" (change)="toggleBilling()">
+        <span class="slider round"></span>
+      </label>
+      <span [class.active]="isAnnual">
+        Annual <span class="discount-badge">-15%</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="plans-grid">
+    <app-pricing-card
+      *ngFor="let plan of plans"
+      [plan]="plan"
+      [isAnnual]="isAnnual"
+      [isPopular]="plan.id === 'pro'"
+      (selectPlan)="onPlanSelected($event)"
+    ></app-pricing-card>
+  </div>
+</div>
+
+<!-- Новое модальное окно подтверждения оплаты -->
+<app-payment-confirmation-modal
+  [visible]="showPaymentModal"
+  [plan]="selectedPlan"
+  [isAnnual]="isAnnual"
+  [processing]="paymentProcessing"
+  (close)="closePaymentModal()"
+  (confirm)="confirmPayment()"
+></app-payment-confirmation-modal>

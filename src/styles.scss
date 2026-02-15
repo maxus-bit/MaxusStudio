@@ -1,0 +1,163 @@
+// Глобальные стили для Angular приложения
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+@import './styles/variables';
+@import './styles/mixins';
+
+// Глобальный сброс
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+// Устанавливаем шрифт для body и элементов форм, которые не наследуют его по умолчанию
+body, button, input, select, textarea {
+  font-family: 'Montserrat', sans-serif;
+}
+
+app-root {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: var(--bg-color) !important;
+  background-color: var(--bg-color) !important;
+  color: var(--text-white);
+}
+
+// Скрываем overflow только для дашборда
+body.dashboard-page {
+  height: 100vh;
+  overflow: hidden;
+}
+
+// Для лендинга разрешаем скролл
+body.landing-page {
+  overflow: auto;
+  height: auto;
+  min-height: 100vh;
+}
+
+// Глобальные стили для кнопок
+.btn {
+  padding: 10px 25px;
+  border-radius: $border-radius;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: $transition-cubic;
+  font-family: $font-family;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background-color: $primary-red;
+  color: $text-white;
+
+  &:hover:not(:disabled) {
+    background-color: #ff4d6a;
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid $primary-red;
+  color: $text-white;
+
+  &:hover:not(:disabled) {
+    background-color: $primary-red;
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 42, 77, 0.5);
+  }
+}
+
+.btn-glow {
+  background-color: $primary-red;
+  color: white;
+  padding: 15px 40px;
+  font-size: 1rem;
+  border-radius: 30px;
+  box-shadow: 0 0 15px $primary-red;
+  margin-top: 20px;
+
+  &:hover:not(:disabled) {
+    background-color: #ff4d6a;
+    box-shadow: 0 0 25px $primary-red;
+    transform: scale(1.05);
+  }
+}
+
+// Глобальные анимации
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Глобальные стили для скроллбара
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $bg-color;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $border-color;
+  border-radius: 4px;
+
+  &:hover {
+    background: #333;
+  }
+}
+
+// Импорт глобальных стилей Dashboard
+@import './styles/dashboard-global';

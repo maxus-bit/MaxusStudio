@@ -1,0 +1,15 @@
+<div class="modal-overlay" *ngIf="visible" (click)="onOverlayClick($event)">
+  <div class="modal-window" (click)="$event.stopPropagation()">
+    <button class="modal-close" *ngIf="showClose" (click)="onClose()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal-content-wrapper">
+      <div class="modal-header" *ngIf="title">
+        <h2>{{ title }}</h2>
+      </div>
+      <div class="modal-body">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

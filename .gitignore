@@ -1,0 +1,71 @@
+# --- Angular & Node Defaults ---
+/dist
+/tmp
+/out-tsc
+/bazel-out
+node_modules/
+functions/node_modules/
+npm-debug.log
+yarn-error.log
+
+# --- IDEs (JetBrains & VS Code) ---
+.idea/
+*.iml
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# --- Miscellaneous ---
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+.DS_Store
+Thumbs.db
+
+# --- FIREBASE (Важно!) ---
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+firebase.json.backup
+
+# --- SECURITY & SECRETS (КРИТИЧНО!) ---
+# Ключи и сертификаты
+*.key
+*.pem
+*.p12
+*.jks
+
+# Локальные настройки с паролями
+.env
+.env.local
+.env.*.local
+
+# JSON ключи от Google Cloud / Firebase Service Accounts
+service-account.json
+*.json
+!package.json
+!tsconfig.json
+!angular.json
+!firebase.json
+!ng-package.json
+!tslint.json
+
+# Секретные environment файлы Angular
+# Оставляем только environment.ts (пустой шаблон),
+# а environment.development.ts (с ключами) игнорируем
+src/environments/environment.development.ts
+src/environments/environment.local.ts

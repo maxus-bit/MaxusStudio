@@ -1,0 +1,102 @@
+<div class="prompt-container-fixed">
+  <div class="prompt-box-wrapper">
+    <div class="prompt-box-lock-overlay" *ngIf="isLocked">
+      <div class="lock-icon">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <p class="lock-message">Subscription expired. Please renew your plan to continue generating.</p>
+      <button class="btn btn-primary" (click)="onGoToPlans()">Go to Plans</button>
+    </div>
+    
+    <div class="prompt-box" [class.locked]="isLocked">
+      
+      <!-- Preview Container for multiple images -->
+      <div class="preview-container" *ngIf="attachedImages.length > 0">
+        <div class="image-preview-item" *ngFor="let img of attachedImages; let i = index">
+          <img [src]="img" alt="Attached Image">
+          <button class="remove-image-btn" (click)="removeImage(i)">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <textarea
+        #promptInput
+        id="promptInput"
+        [(ngModel)]="prompt"
+        placeholder="Describe what you want to imagine..."
+        [disabled]="isLocked || isGenerating"
+        (keydown)="onKeyDown($event)"
+      ></textarea>
+
+      <div class="prompt-actions">
+        <div class="tools">
+          <div class="tool-wrapper">
+            <button 
+              id="settingsBtn" 
+              class="tool-btn"
+              (click)="toggleModelDropdown()"
+              [disabled]="isLocked"
+            >
+              <i class="fa-solid fa-sliders"></i> 
+              <span id="currentModelLabel">{{ currentModel === 'v1' ? 'V1' : 'V2' }}</span>
+            </button>
+            <div id="modelDropdown" class="settings-dropdown" [class.show]="showModelDropdown">
+              <div class="dropdown-header">Select Model</div>
+              <div 
+                class="model-option" 
+                [class.active]="currentModel === 'v1'"
+                (click)="selectModel('v1')"
+              >
+                <div class="model-info">
+                  <span class="model-name">Maxus V1</span>
+                  <span class="model-badge free">Free</span>
+                </div>
+                <i class="fa-solid fa-check" *ngIf="currentModel === 'v1'"></i>
+              </div>
+              <div 
+                class="model-option disabled" 
+                id="optionV2"
+                [class.active]="currentModel === 'v2'"
+                (click)="selectModel('v2')"
+              >
+                <div class="model-info">
+                  <span class="model-name">Maxus V2</span>
+                  <span class="model-badge pro">Pro</span>
+                </div>
+                <i class="fa-solid fa-lock" *ngIf="currentModel !== 'v2'"></i>
+                <i class="fa-solid fa-check" *ngIf="currentModel === 'v2'"></i>
+              </div>
+            </div>
+          </div>
+          <button 
+            id="imageRefBtn" 
+            class="tool-btn"
+            (click)="triggerImageInput()"
+            [disabled]="isLocked"
+          >
+            <i class="fa-regular fa-image"></i> Image
+          </button>
+          <input 
+            type="file" 
+            #imageInput
+            id="chatImageInput" 
+            accept=".jpg,.jpeg,.png,.webp" 
+            multiple
+            hidden
+            (change)="onImageSelect($event)"
+          >
+        </div>
+        <button 
+          class="generate-btn" 
+          (click)="onGenerate()"
+          [disabled]="isLocked || isGenerating || !prompt.trim()"
+        >
+          <span *ngIf="!isGenerating">Generate</span>
+          <span *ngIf="isGenerating">Generating...</span>
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

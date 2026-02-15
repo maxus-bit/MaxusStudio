@@ -1,0 +1,388 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+:host {
+  display: block;
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.prompt-container-fixed {
+  margin-top: auto !important;
+  flex-shrink: 0;
+  width: 100%;
+  padding: 20px 40px 30px 40px;
+  background: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+}
+
+.prompt-box-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 100px;
+  box-sizing: border-box;
+}
+
+.prompt-box-lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: $border-radius-lg;
+  @include flex-center;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 10;
+  padding: 40px;
+
+  .lock-icon {
+    font-size: 3rem;
+    color: $primary-red;
+  }
+
+  .lock-message {
+    color: $text-white;
+    text-align: center;
+    font-size: 1rem;
+    max-width: 400px;
+  }
+}
+
+.prompt-box {
+  width: 100%;
+  max-width: 100%;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  margin-bottom: 0;
+  box-sizing: border-box;
+
+  &.locked {
+    filter: blur(2px);
+    pointer-events: none;
+  }
+}
+
+// Контейнер для списка превью
+.preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 15px;
+  min-height: 80px; // Чтобы не прыгало
+}
+
+// Элемент превью
+.image-preview-item {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  min-height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #252525;
+  border: 1px solid #333;
+  display: block; 
+  flex-shrink: 0;
+
+  &:hover .remove-image-btn {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #252525;
+  }
+
+  .remove-image-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    border: none;
+    color: $text-white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 20;
+
+    i {
+      font-size: 10px;
+    }
+
+    &:hover {
+      background: #ff2a4d;
+      transform: scale(1.1);
+    }
+  }
+}
+
+textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  resize: none;
+  outline: none;
+  min-height: 24px;
+  height: auto;
+  max-height: 150px;
+  line-height: 1.5;
+  padding: 0;
+  margin: 5px 0;
+
+  &::placeholder {
+    color: $text-grey;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.prompt-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.tools {
+  display: flex;
+  gap: 10px;
+}
+
+.tool-wrapper {
+  position: relative;
+}
+
+.tool-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  color: #aaa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.2s;
+
+  &:hover:not(:disabled),
+  &.active {
+    background: #333;
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.settings-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 10px;
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  min-width: 200px;
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+  &.show {
+    display: flex;
+  }
+}
+
+.dropdown-header {
+  padding: 12px 15px;
+  border-bottom: 1px solid $border-color;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: $text-grey;
+  text-transform: uppercase;
+}
+
+.model-option {
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover:not(.disabled) {
+    background: $hover-bg;
+  }
+
+  &.active {
+    background: rgba(255, 42, 77, 0.1);
+    color: $primary-red;
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.model-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.model-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.model-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+
+  &.free {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+  }
+
+  &.pro {
+    background: rgba(157, 0, 255, 0.2);
+    color: $primary-purple;
+  }
+}
+
+.generate-btn {
+  padding: 12px 30px;
+  background: $primary-red;
+  color: $text-white;
+  border: none;
+  border-radius: $border-radius;
+  font-weight: 600;
+  cursor: pointer;
+  transition: $transition;
+  @include flex-center;
+  gap: 8px;
+  font-size: 1rem;
+  white-space: nowrap; // Prevent text wrapping
+
+  &:hover:not(:disabled) {
+    background: #ff4d6a;
+    transform: scale(1.05);
+  }
+
+  /* 🔥 ИЗМЕНЕНИЕ: Когда кнопка заблокирована (нажата) меняем фон на нужный цвет */
+  &:disabled {
+    opacity: 0.8; /* Чуть менее прозрачный */
+    cursor: not-allowed;
+    background: #ff3333; /* Тот самый цвет для состояния Generating... */
+  }
+
+  i {
+    color: $text-white;
+  }
+}
+
+// Media queries for mobile adjustments
+@media (max-width: 480px) {
+  .prompt-container-fixed {
+    padding: 15px 20px 20px 20px;
+  }
+  
+  .prompt-box {
+    padding: 12px;
+  }
+
+  .prompt-actions {
+    flex-wrap: nowrap; /* Keep them on the same line if possible */
+    gap: 10px;
+    align-items: center;
+  }
+
+  .tools {
+    gap: 5px;
+  }
+  
+  .tool-btn {
+    padding: 8px 10px; // Slightly smaller padding
+    font-size: 0.8rem;
+    
+    span {
+        display: none; // Hide text on very small screens if needed, or keep short
+    }
+    
+    #currentModelLabel {
+        display: inline; // Keep model label
+    }
+  }
+
+  .generate-btn {
+    /* Стили для круглой кнопки на мобильных */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Скрываем текст */
+    span {
+      display: none;
+    }
+    
+    /* Убедимся, что иконка видна и центрирована */
+    i {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+  }
+}

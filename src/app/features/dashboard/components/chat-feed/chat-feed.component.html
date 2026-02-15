@@ -1,0 +1,48 @@
+<div class="chat-feed" #chatFeed>
+  <div class="chat-welcome" *ngIf="showWelcome && messages.length === 0">
+    <div class="welcome-content">
+      <h1>Hi {{ displayName }}</h1>
+      <h2>What will you generate today?</h2>
+    </div>
+  </div>
+
+  <div 
+    *ngFor="let message of messages; trackBy: trackByMessageId" 
+    class="message"
+    [class.user-message]="message.role === 'user'"
+    [class.ai-message]="message.role === 'ai'"
+  >
+    <div class="message-content" *ngIf="message.role === 'user'">
+      <p>{{ message.content }}</p>
+      <img *ngIf="message.imageUrl" [src]="message.imageUrl" alt="Reference image" class="reference-image">
+    </div>
+
+    <div class="message-content" *ngIf="message.role === 'ai'">
+      <div *ngIf="isLoading && !message.content && !message.imageUrl" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Generating your thumbnail...</p>
+      </div>
+      <div *ngIf="message.imageUrl" class="ai-image-card">
+        <img [src]="message.imageUrl" alt="Generated thumbnail">
+        <div class="ai-actions-overlay">
+          <button class="action-circle-btn download-btn" title="Download" (click)="onDownloadImage(message.imageUrl, $event)">
+            <i class="fa-solid fa-download"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Для старых сообщений, где url может быть в content -->
+      <div *ngIf="!message.imageUrl && message.content && (message.content.startsWith('http') || message.content.startsWith('data:'))" class="ai-image-card">
+         <img [src]="message.content" alt="Generated thumbnail">
+         <div class="ai-actions-overlay">
+          <button class="action-circle-btn download-btn" title="Download" (click)="onDownloadImage(message.content, $event)">
+            <i class="fa-solid fa-download"></i>
+          </button>
+        </div>
+      </div>
+      
+      <p *ngIf="message.content && !message.imageUrl && !message.content.startsWith('http') && !message.content.startsWith('data:')">
+        {{ message.content }}
+      </p>
+    </div>
+  </div>
+</div>
