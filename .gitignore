@@ -46,3 +46,7 @@ firebase.json.backup
 src/environments/environment.development.ts
 src/environments/environment.local.ts
 src/environments/*.development.ts
+
+# etc
+storage.rules
+MaxusCursor.code-workspace
