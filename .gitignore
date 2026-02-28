@@ -1,4 +1,3 @@
-# --- Angular & Node Defaults ---
 /dist
 /tmp
 /out-tsc
@@ -8,7 +7,6 @@ functions/node_modules/
 npm-debug.log
 yarn-error.log
 
-# --- IDEs (JetBrains & VS Code) ---
 .idea/
 *.iml
 .project
@@ -24,47 +22,27 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
-# --- Miscellaneous ---
 /.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
-/libpeerconnection.log
+/libpeerconness.log
 testem.log
 /typings
 .DS_Store
 Thumbs.db
 
-# --- FIREBASE (Важно!) ---
-.firebase/
+.firebase/hosting.*.cache
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
 firebase.json.backup
 
-# Ключи и сертификаты
 *.key
 *.pem
 *.p12
 *.jks
 
-# Локальные настройки с паролями
-.env
-.env.local
-.env.*.local
-functions/.env
-functions/.env.local
-functions/.env.*.local
-
-# JSON ключи от Google Cloud / Firebase Service Accounts
-service-account.json
-*.json
-!package.json
-!tsconfig.json
-!angular.json
-!firebase.json
-!ng-package.json
-!tslint.json
-
 src/environments/environment.development.ts
 src/environments/environment.local.ts
+src/environments/*.development.ts
