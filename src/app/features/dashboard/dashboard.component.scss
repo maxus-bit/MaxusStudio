@@ -130,11 +130,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
-  border-bottom: none; /* Убрали полоску снизу */
+  border-bottom: none;
 }
 
 .dropdown-divider {
-  display: none; /* Убрали разделитель */
+  display: none;
 }
 
 .dropdown-item {
@@ -159,7 +159,7 @@
 
   &.logout {
     color: var(--primary-red);
-    margin-top: 5px; /* Немного отступа сверху вместо divider */
+    margin-top: 5px;
     
     &:hover {
       background: rgba(255, 75, 75, 0.1);

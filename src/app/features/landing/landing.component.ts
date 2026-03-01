@@ -88,7 +88,6 @@ export class LandingComponent implements OnInit {
   }
 
   toggleBilling() {
-    // isAnnual updates automatically via ngModel
   }
 
   selectPlan(planId: string) {
@@ -117,7 +116,7 @@ export class LandingComponent implements OnInit {
     
     this.paymentProcessing = true;
     
-    // Имитация
+    // Imitation
     setTimeout(() => {
         console.log(`Processing payment for ${this.selectedPlan?.name}`);
         this.paymentProcessing = false;

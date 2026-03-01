@@ -68,16 +68,11 @@
     align-items: center;
     gap: 0.75rem;
     
-    // .app-logo {
-    //   width: 32px;
-    //   height: 32px;
-    // }
-    
     .app-name {
       font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: -0.5px;
-      color: #ff3333; // Red color for Maxus
+      color: #ff3333;
     }
   }
 }
@@ -126,23 +121,23 @@
 .new-chat-btn {
   display: flex;
   align-items: center;
-  justify-content: flex-start; // Changed to flex-start for alignment similar to menu items
-  gap: 0.75rem; // Matched gap with menu items
-  padding: 0.75rem 1rem; // Matched padding with menu items
-  background-color: transparent; // Make it transparent like menu items
-  color: #888; // Default color same as menu items
-  border: 1px solid rgba(255, 255, 255, 0.1); // Added a subtle border
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  font-weight: 500; // Adjusted font weight
+  font-weight: 500;
   font-size: 0.95rem;
   cursor: pointer;
-  width: 100%; // Ensure it takes full width
+  width: 100%;
   transition: all 0.2s ease;
   
   i {
     width: 20px;
     text-align: center;
-    color: #ff3333; // Red accent for the plus icon
+    color: #ff3333;
   }
 
   &:hover {
@@ -226,10 +221,9 @@
   }
   
   &.active {
-    background-color: rgba(255, 255, 255, 0.1); // Slightly lighter background
+    background-color: rgba(255, 255, 255, 0.1);
     color: white;
     font-weight: 500;
-    // Removed box-shadow and padding-left adjustments to eliminate the red line
   }
 
   .chat-info {
@@ -351,10 +345,10 @@
     i {
       width: 16px;
       text-align: center;
-      display: inline-block; /* Ensure icons take up space */
+      display: inline-block;
     }
     
-    /* Стили для перечеркнутой иконки */
+    /* Styles for line icon */
     .slashed-icon {
         position: relative;
     }

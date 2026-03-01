@@ -5,7 +5,7 @@ import { User } from '@angular/fire/auth';
 import { UserData } from '../models/user.model';
 import { Chat } from '../models/chat.model';
 
-// Интерфейсы состояния
+// Interfaces
 export interface AppState {
   user: User | null;
   userData: UserData | null;
@@ -17,7 +17,7 @@ export interface AppState {
   currentModel: 'v1' | 'v2';
 }
 
-// Начальное состояние
+// First initial state of the application
 const initialState: AppState = {
   user: null,
   userData: null,
@@ -36,7 +36,7 @@ export class AppStateService {
   private stateSubject = new BehaviorSubject<AppState>(initialState);
   public state$: Observable<AppState> = this.stateSubject.asObservable();
 
-  // Селекторы для удобного доступа к частям состояния
+  // Selectors for individual pieces of state
   get user$(): Observable<User | null> {
     return this.state$.pipe(map(state => state.user));
   }
@@ -69,7 +69,7 @@ export class AppStateService {
     return this.state$.pipe(map(state => state.currentModel));
   }
 
-  // Комбинированные селекторы
+  // Combined selectors for derived state
   get credits$(): Observable<number> {
     return this.userData$.pipe(
       map(userData => userData?.credits || 0)
@@ -94,7 +94,7 @@ export class AppStateService {
     );
   }
 
-  // Геттеры для синхронного доступа
+  // Getters for current state values
   get currentState(): AppState {
     return this.stateSubject.value;
   }
@@ -119,7 +119,7 @@ export class AppStateService {
     return this.currentState.activeSection;
   }
 
-  // Actions - методы для обновления состояния
+  // Actions - methods to update the state
   setUser(user: User | null): void {
     this.updateState({ user });
   }
@@ -179,14 +179,14 @@ export class AppStateService {
     }
   }
 
-  // Приватный метод для обновления состояния
+  // Private method to update the state with partial updates
   private updateState(partialState: Partial<AppState>): void {
     const currentState = this.stateSubject.value;
     const newState = { ...currentState, ...partialState };
     this.stateSubject.next(newState);
   }
 
-  // Сброс состояния (например, при выходе)
+  // Method to reset the state to initial values
   resetState(): void {
     this.stateSubject.next(initialState);
   }

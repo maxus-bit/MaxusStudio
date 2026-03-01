@@ -29,7 +29,7 @@ export class UIStateService {
   private stateSubject = new BehaviorSubject<UIState>(initialState);
   public state$: Observable<UIState> = this.stateSubject.asObservable();
 
-  // Селекторы
+  // Selectors
   get showAuthModal$(): Observable<boolean> {
     return this.state$.pipe(map(state => state.showAuthModal));
   }
@@ -103,7 +103,7 @@ export class UIStateService {
       toastMessages: [...currentToasts, { id, message, type }]
     });
 
-    // Автоматическое удаление через 3 секунды
+    // Automatically remove the toast after 3 seconds
     setTimeout(() => {
       this.removeToast(id);
     }, 3000);

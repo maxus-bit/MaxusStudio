@@ -49,4 +49,3 @@ export class ToastService {
     this.show(message, 'info', duration);
   }
 }
-

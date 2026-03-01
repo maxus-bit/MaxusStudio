@@ -49,13 +49,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   get currentModel$() { return this.appState.currentModel$; }
   get showSettings$() { return this.uiState.showSettingsModal$; }
   
-  // Состояние выпадающего меню профиля
+  // State for user dropdown
   isUserDropdownOpen = false;
 
-  // Изображения для prompt-box (теперь массив)
+  // Image attachments for prompt box
   promptBoxImages: string[] = [];
   
-  // Комбинированные Observable для чата
+  // Combined observable for active chat messages
   get activeChatMessages$() {
     return combineLatest([
       this.appState.chats$,
@@ -75,7 +75,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.appState.activeChatId$
     ]).pipe(
       map(([messages, chatId]) => {
-        // Показываем welcome только если нет активного чата И нет сообщений
+        // Show welcome message only if no chat is selected and there are no messages
         return !chatId && messages.length === 0;
       })
     );
@@ -88,11 +88,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ]).pipe(
       map(([userData, isSubscriptionActive]) => {
         if (!userData) return false;
-        // Блокируем если подписка истекла (только для платных пользователей)
+        // Block if subscription expired
         if (userData.subscriptionExpiry && !isSubscriptionActive) {
           return true;
         }
-        // Блокируем если нет кредитов
+        // Block if no credits left
         return (userData.credits || 0) <= 0;
       })
     );
@@ -104,11 +104,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.appState.isSubscriptionActive$
     ]).pipe(
       map(([userData, isSubscriptionActive]) => {
-        // Показываем модальное окно только если подписка истекла
+        // Show modal window if subscription expired and not active
         if (!userData?.subscriptionExpiry) return false;
         if (isSubscriptionActive) return false;
         
-        // Показываем только один раз за сессию
+        // Show only if not shown before in this session
         const modalShown = sessionStorage.getItem('subscriptionExpiredModalShown');
         if (!modalShown) {
           sessionStorage.setItem('subscriptionExpiredModalShown', 'true');
@@ -136,10 +136,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Добавляем класс для блокировки скролла на дашборде
+    // Add class to body for dashboard-specific styles
     document.body.classList.add('dashboard-page');
     document.body.classList.remove('landing-page');
-    // Подписка на пользователя - состояние обновляется автоматически через AuthService
+    // Subscribe to auth state changes
     this.authService.currentUser$.subscribe(user => {
       if (!user) {
         this.router.navigate(['/']);
@@ -147,8 +147,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
       
       this.appState.setUser(user);
-      
-      // Загружаем данные пользователя - состояние обновляется автоматически через FirestoreService
+
       this.firestoreService.getUserData$(user.uid).subscribe();
       this.firestoreService.getChatHistory$(user.uid).subscribe();
       
@@ -157,10 +156,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Убираем класс при выходе из дашборда
+    // Cleanup: Remove dashboard-specific class from body
     document.body.classList.remove('dashboard-page');
-    
-    // Отменяем генерацию при уничтожении компонента
+
     if (this.abortController) {
       this.abortController.abort();
     }
@@ -189,13 +187,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onSectionChange(section: string) {
-    // Сбрасываем активный чат при переключении раздела
     this.appState.setActiveChatId(null);
     this.appState.setActiveSection(section as 'home' | 'creations' | 'plans');
   }
 
   onChatSelected(chatId: string) {
-    // Переключаемся на раздел Home при выборе чата
     this.appState.setActiveSection('home');
     this.appState.setActiveChatId(chatId);
   }
@@ -222,8 +218,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onSubscriptionExpiredClose() {
-    // Модальное окно можно закрыть, но генерация останется заблокированной
-    // Не удаляем флаг из sessionStorage, чтобы не показывать снова в этой сессии
   }
 
   onSubscriptionExpiredGoToPlans() {
@@ -231,18 +225,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onImageAttached(imageUrl: string) {
-    // Добавляем новое изображение в массив
     this.promptBoxImages.push(imageUrl);
   }
 
   onImageRemoved(index: number) {
-    // Удаляем изображение по индексу
     if (index >= 0 && index < this.promptBoxImages.length) {
       this.promptBoxImages.splice(index, 1);
     }
   }
 
-  // Вспомогательный метод для красивых ошибок
+  // Helper to parse error messages and return user-friendly text
   private getFriendlyErrorMessage(error: any): string {
     const message = (error.message || '').toLowerCase();
     
@@ -275,27 +267,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async onGenerate(event: { prompt: string; images: string[]; model: 'v1' | 'v2' }) {
-    // Проверяем блокировку
     const isLocked = await this.isLocked$.pipe(take(1)).toPromise();
     if (isLocked) {
       this.toastService.error('Generations are blocked. Please check your subscription or credits.');
       return;
     }
 
-    // Проверяем кредиты
     const userData = await this.userData$.pipe(take(1)).toPromise();
     if (!userData || (userData.credits || 0) <= 0) {
       this.toastService.error('Generations are over!');
       return;
     }
 
-    // Если генерация уже идет - останавливаем
     if (this.abortController) {
       this.abortController.abort();
       this.abortController = null;
       this.appState.setIsGenerating(false);
-      
-      // Restore attached images if stopped manually
+
       if (this.lastAttachedImages.length > 0) {
           this.promptBoxImages = [...this.lastAttachedImages];
       }
@@ -313,11 +301,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Начинаем генерацию
     this.appState.setIsGenerating(true);
     this.abortController = new AbortController();
-    
-    // Save current images in case of stop/cancellation
+
     this.lastAttachedImages = [...this.promptBoxImages];
     // Clear current images from view while generating
     this.promptBoxImages = [];
@@ -331,13 +317,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         throw new Error('Generation cancelled');
       }
 
-      // 2. Генерируем изображение через Gemini/Imagen API
+      // 2. Generate image with Gemini API
       const initImage = event.images && event.images.length > 0 ? event.images[0] : undefined;
 
       const response = await this.geminiApiService.generateImage(
         {
           prompt: textForGeneration,
-          image: initImage, // Using the first image if available
+          image: initImage,
           mode: initImage ? 'image-to-image' : 'text-to-image',
           model: event.model
         },
@@ -348,7 +334,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         throw new Error('Generation cancelled');
       }
 
-      // 3. Загружаем в Firebase Storage
+      // 3. Upload image to storage and get URL
       // Gemini API service should return a base64 string which we upload
       const imageUrl = await this.storageService.uploadImageBase64(user.uid, response.image);
 
@@ -356,10 +342,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         throw new Error('Generation cancelled');
       }
 
-      // 4. Создаем сообщения
+      // 4. Create chat messages
       const userMessage: ChatMessage = {
         role: 'user',
-        content: rawPrompt // Показываем оригинальный русский текст
+        content: rawPrompt
       };
 
       const aiMessage: ChatMessage = {
@@ -367,11 +353,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         content: imageUrl
       };
 
-      // 5. Сохраняем в чат
+      // 5. Save messages to Firestore
       const activeChatId = await this.activeChatId$.pipe(take(1)).toPromise();
       
       if (activeChatId) {
-        // Обновляем существующий чат
         const currentChat = await this.appState.chats$.pipe(take(1)).toPromise();
         const chat = currentChat?.find(c => c.id === activeChatId);
         const oldMessages = chat?.messages || [];
@@ -379,7 +364,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         
         await this.firestoreService.updateChatMessages(user.uid, activeChatId, updatedMessages);
       } else {
-        // Создаем новый чат
         const newChat = {
           timestamp: new Date().toISOString(),
           isPinned: false,
@@ -391,20 +375,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.appState.setActiveChatId(chatId);
       }
 
-      // 6. Обновляем кредиты
+      // 6. Update user credits
       const newCredits = (userData.credits || 0) - 1;
       await this.firestoreService.updateUserData(user.uid, { credits: newCredits });
       this.appState.updateCredits(newCredits);
 
       this.toastService.success('Image generated successfully!');
-      
-      // Images are consumed, no need to restore unless error/stop.
+
       this.lastAttachedImages = []; 
 
     } catch (error: any) {
       if (error.message === 'Generation cancelled' || error.name === 'AbortError') {
         this.toastService.info('Generation stopped');
-        // Restore images on stop
         this.promptBoxImages = [...this.lastAttachedImages];
       } else {
         // Log full error to console for developers

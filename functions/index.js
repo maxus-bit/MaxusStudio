@@ -4,7 +4,7 @@ const { GoogleAuth } = require("google-auth-library");
 const { VertexAI } = require('@google-cloud/vertexai');
 const admin = require('firebase-admin');
 
-// Инициализация Stripe (ключ будет браться из переменных окружения при деплое)
+// Initializing Stripe
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_PLACEHOLDER'); 
 
 admin.initializeApp();
@@ -13,17 +13,15 @@ const auth = new GoogleAuth({
   scopes: "https://www.googleapis.com/auth/cloud-platform",
 });
 
-// --- 0. Создание Пользователя (Триггер) ---
-// При создании нового пользователя в Auth, проверяем историю и создаем документ в Firestore.
+// --- 0. New user Registration ---
+// If create new user in Auth, check history and add in Firestore.
 exports.onUserCreated = require("firebase-functions/v1").auth.user().onCreate(async (user) => {
     const db = admin.firestore();
     const email = user.email;
-    let initialCredits = 2; // По умолчанию даем 2 кредита
+    let initialCredits = 2; // Default 2 credits for new users
 
-    // Если есть email, проверяем, регистрировался ли он ранее
+    // If email is true, check if this email has been registered before in a special history collection.
     if (email) {
-        // Используем email как ID документа в специальной коллекции истории
-        // Это предотвратит повторное начисление даже при удалении основного аккаунта
         const historyRef = db.collection('registration_history').doc(email);
         
         try {
@@ -33,7 +31,7 @@ exports.onUserCreated = require("firebase-functions/v1").auth.user().onCreate(as
                 console.log(`Email ${email} has been used before. No new free credits granted.`);
                 initialCredits = 0;
             } else {
-                // Записываем email в историю, чтобы запомнить факт выдачи бесплатных кредитов
+                // Write email in history.
                 await historyRef.set({
                     firstRegisteredAt: admin.firestore.FieldValue.serverTimestamp(),
                     originalUid: user.uid
@@ -41,8 +39,7 @@ exports.onUserCreated = require("firebase-functions/v1").auth.user().onCreate(as
             }
         } catch (historyError) {
             console.error("Error checking registration history:", historyError);
-            // В случае ошибки безопаснее не давать кредиты или дать (на усмотрение), 
-            // но здесь продолжим выполнение с дефолтным значением или 0, чтобы не абузили при сбоях БД.
+            // If user error occurs, don't take credits.
         }
     }
 
@@ -60,7 +57,7 @@ exports.onUserCreated = require("firebase-functions/v1").auth.user().onCreate(as
     }
 });
 
-// --- 1. Генерация Изображений ---
+// --- 1. Generation images ---
 exports.generateImage = onCall({ region: "us-central1", timeoutSeconds: 60 }, async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "The function must be called while authenticated.");
@@ -106,11 +103,10 @@ exports.generateImage = onCall({ region: "us-central1", timeoutSeconds: 60 }, as
   try {
     const vertexAI = new VertexAI({ project: projectId, location: location });
     
-    // UPDATED: Using Gemini 2.0 Flash 001
+    // Using Gemini 2.0 Flash 001 for pipeline.
     const generativeModel = vertexAI.getGenerativeModel({ model: 'gemini-2.0-flash-001' });
 
-    // ОБНОВЛЕННАЯ ЛОГИКА ПРОМПТ-ИНЖИНИРИНГА (BETTER TEXT RENDERING)
-    
+    // General logic for prompt optimization:
     const SYSTEM_INSTRUCTION = `
     You are an expert Visual Prompt Engineer for Imagen 3.
     
@@ -150,7 +146,7 @@ exports.generateImage = onCall({ region: "us-central1", timeoutSeconds: 60 }, as
     `;
 
     if (imageBase64) {
-      // IMAGE TO IMAGE MODE
+      // Image to Image mode.
       const cleanBase64 = imageBase64.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
       const imagePart = { inlineData: { data: cleanBase64, mimeType: 'image/png' } };
       const textPart = {
@@ -262,7 +258,7 @@ exports.generateImage = onCall({ region: "us-central1", timeoutSeconds: 60 }, as
   return { image: generatedImageBase64 };
 });
 
-// --- 2. Создание сессии Портала (Billing) ---
+// --- 2. Billing ---
 exports.createPortalSession = onCall({ region: "us-central1" }, async (request) => {
     if (!request.auth) {
         throw new HttpsError('unauthenticated', 'User must be logged in');
@@ -296,7 +292,7 @@ exports.createPortalSession = onCall({ region: "us-central1" }, async (request) 
     }
 });
 
-// --- 3. Синхронизация Подписки (Webhook Handler) ---
+// --- 3. Sunc Webhook Handler ---
 exports.onSubscriptionUpdate = onDocumentWritten("customers/{uid}/subscriptions/{subId}", async (event) => {
     const snapshot = event.data.after;
     const uid = event.params.uid;
@@ -315,14 +311,14 @@ exports.onSubscriptionUpdate = onDocumentWritten("customers/{uid}/subscriptions/
     const items = subData.items || [];
     const priceId = items.length > 0 ? items[0].price.id : null;
 
-    // --- КОНФИГУРАЦИЯ ТВОИХ ЦЕН ---
+    // --- Configuration prices ---
     const PLANS = {
-        // Месячные
+        // Monthly
         'price_1SsKj73OhZaczFnLGEiyalX1': { name: 'basic', credits: 80 },
         'price_1SsKjZ3OhZaczFnLrPztPsTY': { name: 'pro', credits: 200 },
         'price_1SsKjt3OhZaczFnLnlGe0mii': { name: 'ultra', credits: 1000 },
         
-        // Годовые (x12 кредитов)
+        // Yearly
         'price_1SsKus3OhZaczFnLXHzLQUfE': { name: 'basic', credits: 960 },
         'price_1SsKvM3OhZaczFnLEyjOznE9': { name: 'pro', credits: 2400 },
         'price_1SsKwM3OhZaczFnLXsqzHNmO': { name: 'ultra', credits: 12000 }

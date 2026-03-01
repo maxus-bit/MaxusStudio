@@ -76,17 +76,17 @@
   }
 }
 
-// Контейнер для списка превью
+// Container for image previews
 .preview-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   width: 100%;
   margin-bottom: 15px;
-  min-height: 80px; // Чтобы не прыгало
+  min-height: 80px;
 }
 
-// Элемент превью
+// Element for each image preview
 .image-preview-item {
   position: relative;
   width: 80px;
@@ -312,18 +312,17 @@ textarea {
   @include flex-center;
   gap: 8px;
   font-size: 1rem;
-  white-space: nowrap; // Prevent text wrapping
+  white-space: nowrap;
 
   &:hover:not(:disabled) {
     background: #ff4d6a;
     transform: scale(1.05);
   }
 
-  /* 🔥 ИЗМЕНЕНИЕ: Когда кнопка заблокирована (нажата) меняем фон на нужный цвет */
   &:disabled {
-    opacity: 0.8; /* Чуть менее прозрачный */
+    opacity: 0.8;
     cursor: not-allowed;
-    background: #ff3333; /* Тот самый цвет для состояния Generating... */
+    background: #ff3333;
   }
 
   i {
@@ -342,7 +341,7 @@ textarea {
   }
 
   .prompt-actions {
-    flex-wrap: nowrap; /* Keep them on the same line if possible */
+    flex-wrap: nowrap;
     gap: 10px;
     align-items: center;
   }
@@ -352,20 +351,21 @@ textarea {
   }
   
   .tool-btn {
-    padding: 8px 10px; // Slightly smaller padding
+    padding: 8px 10px;
     font-size: 0.8rem;
     
     span {
-        display: none; // Hide text on very small screens if needed, or keep short
+        display: none;
     }
     
     #currentModelLabel {
-        display: inline; // Keep model label
+        display: inline;
     }
   }
 
   .generate-btn {
-    /* Стили для круглой кнопки на мобильных */
+
+    /* Styles for button at modile */
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -374,12 +374,11 @@ textarea {
     align-items: center;
     justify-content: center;
     
-    /* Скрываем текст */
+    /* Heading text */
     span {
       display: none;
     }
-    
-    /* Убедимся, что иконка видна и центрирована */
+
     i {
       font-size: 1.1rem;
       margin: 0;

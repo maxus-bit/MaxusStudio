@@ -31,4 +31,3 @@ export class ToastContainerComponent implements OnInit, OnDestroy {
     this.toastService.remove(id);
   }
 }
-

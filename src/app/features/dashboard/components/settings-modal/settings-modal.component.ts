@@ -55,7 +55,7 @@ export class SettingsModalComponent implements OnInit, OnChanges {
       this.isUpdating = true;
       const user = this.authService.currentUser;
       if (user) {
-        // Обновление email через Firebase Auth
+
         // await updateEmail(user, this.email);
         await this.firestoreService.updateUserData(this.userId, { email: this.email });
         this.toastService.success('Email updated successfully');
@@ -82,7 +82,7 @@ export class SettingsModalComponent implements OnInit, OnChanges {
       this.isUpdating = true;
       const user = this.authService.currentUser;
       if (user) {
-        // Обновление пароля через Firebase Auth
+
         // await updatePassword(user, this.newPassword);
         this.toastService.success('Password updated successfully');
         this.newPassword = '';
@@ -102,9 +102,8 @@ export class SettingsModalComponent implements OnInit, OnChanges {
 
     try {
       this.isUpdating = true;
-      // Удаление всех чатов пользователя
-      // Удаление данных пользователя
-      // Удаление аккаунта из Firebase Auth
+
+      // Delete user data from Firestore
       this.toastService.success('Account deleted successfully');
       await this.authService.signOut();
     } catch (error: any) {

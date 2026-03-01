@@ -3,13 +3,13 @@ import { Functions, httpsCallable } from '@angular/fire/functions';
 
 export interface GenerationRequest {
   prompt: string;
-  image?: string; // base64 image for image-to-image
+  image?: string;
   mode?: 'text-to-image' | 'image-to-image';
   model?: 'v1' | 'v2';
 }
 
 export interface GenerationResponse {
-  image: string; // base64 image
+  image: string;
   seed: number;
   finishReason: string;
 }

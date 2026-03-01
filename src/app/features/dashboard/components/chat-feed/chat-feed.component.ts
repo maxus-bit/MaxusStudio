@@ -60,7 +60,6 @@ export class ChatFeedComponent implements OnInit, OnChanges, AfterViewChecked {
     event.stopPropagation();
     
     try {
-      // Пытаемся скачать через Blob, чтобы гарантировать скачивание, а не открытие
       const response = await fetch(imageUrl);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -71,7 +70,7 @@ export class ChatFeedComponent implements OnInit, OnChanges, AfterViewChecked {
       document.body.appendChild(link);
       link.click();
       
-      // Очистка
+      // Cleanup
       setTimeout(() => {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(link);
@@ -80,11 +79,11 @@ export class ChatFeedComponent implements OnInit, OnChanges, AfterViewChecked {
     } catch (error) {
       console.error('Download failed via blob, falling back to direct link:', error);
       
-      // Фолбэк на старый метод, если fetch не сработал (например CORS)
+      // Fallback
       const link = document.createElement('a');
       link.href = imageUrl;
       link.download = `maxus-generated-${new Date().getTime()}.png`;
-      link.target = '_blank'; // На всякий случай, если все же откроется
+      link.target = '_blank';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

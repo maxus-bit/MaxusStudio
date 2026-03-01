@@ -30,4 +30,3 @@ export class PricingCardComponent {
     this.selectPlan.emit(this.plan);
   }
 }
-

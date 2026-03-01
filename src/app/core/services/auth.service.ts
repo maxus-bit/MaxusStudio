@@ -34,20 +34,18 @@ export class AuthService {
 
           if (lastActive) {
             const lastActiveTime = parseInt(lastActive, 10);
-            // Если прошло больше 3 дней с последнего захода
+            // If the user has been inactive for more than the session timeout, log them out
             if (now - lastActiveTime > SESSION_TIMEOUT_MS) {
               console.log('Session expired due to inactivity (> 3 days). Logging out.');
               await this.logout();
-              return; // Прерываем выполнение, так как пользователь разлогинен
+              return; // End the function early since the user is now logged out
             }
           }
 
-          // Если пользователь активен (зашел сейчас), обновляем таймер
-          // Это "обнуляет" счетчик и дает еще 3 дня
+          // If the user is active, update the last active time
           localStorage.setItem('lastActiveTime', now.toString());
-          // -----------------------------
 
-          // Проверяем email verification для email/password аккаунтов
+          // Check email verification for email/password accounts
           const isGoogleProvider = user.providerData?.some(provider => provider.providerId === 'google.com');
           
           if (!isGoogleProvider) {
@@ -58,7 +56,7 @@ export class AuthService {
             }
           }
 
-          // Если пользователь залогинился (особенно через Google), нужно убедиться, что у него есть запись в Firestore
+          // If the user signed in with Google, we can skip email verification check
           if (isGoogleProvider) {
              try {
                 await this.firestoreService.createUserData(user.uid, user.email || '');
@@ -70,8 +68,8 @@ export class AuthService {
           this.currentUserSubject.next(user);
           this.appState.setUser(user);
         } else {
-          // Пользователь вышел или сессия истекла
-          localStorage.removeItem('lastActiveTime'); // Очищаем таймер
+          // User is signed out, clear the session timer and update state
+          localStorage.removeItem('lastActiveTime'); // Clean the timer
           this.currentUserSubject.next(null);
           this.appState.setUser(null);
         }
@@ -95,7 +93,7 @@ export class AuthService {
 
   async signInWithEmail(email: string, password: string): Promise<UserCredential> {
     const credential = await signInWithEmailAndPassword(this.auth, email, password);
-    // При явном входе тоже обновляем время (хотя onAuthStateChanged сработает тоже)
+    // Update last active time on successful sign-in
     localStorage.setItem('lastActiveTime', Date.now().toString());
     return credential;
   }

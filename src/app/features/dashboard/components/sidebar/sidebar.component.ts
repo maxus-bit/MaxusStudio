@@ -67,6 +67,7 @@ export class SidebarComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.userId) return;
 
     const sub = this.firestoreService.getChatHistory$(this.userId).subscribe(chats => {
+
       // Sort: Pinned first, then by date descending
       this.chats = chats.sort((a, b) => {
         if (a.isPinned && !b.isPinned) return -1;
@@ -104,7 +105,6 @@ export class SidebarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   // --- Context Menu Logic ---
-
   toggleMenu(event: Event, chatId: string) {
     event.stopPropagation();
     if (this.openMenuChatId === chatId) {
@@ -123,7 +123,6 @@ export class SidebarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   // --- Actions ---
-
   onPinChat(event: Event, chat: Chat) {
     event.stopPropagation();
     this.openMenuChatId = null;
@@ -149,7 +148,6 @@ export class SidebarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   // --- Rename Modal Actions ---
-
   cancelRename() {
     this.showRenameModal = false;
     this.selectedChatForAction = null;
@@ -168,7 +166,6 @@ export class SidebarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   // --- Delete Modal Actions ---
-
   cancelDelete() {
     this.showDeleteModal = false;
     this.selectedChatForAction = null;

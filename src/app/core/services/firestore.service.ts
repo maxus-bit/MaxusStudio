@@ -14,7 +14,7 @@ export class FirestoreService {
     private appState: AppStateService
   ) {}
 
-  // Методы из dashboard.js - получение данных пользователя
+  // Method to get user data once (e.g., on app initialization)
   async getUserData(uid: string): Promise<UserData | null> {
     const userDocRef = doc(this.firestore, 'users', uid);
     try {
@@ -29,7 +29,7 @@ export class FirestoreService {
     }
   }
 
-  // Observable для отслеживания данных пользователя в реальном времени
+  // Observable for real-time updates to user data
   getUserData$(uid: string): Observable<UserData | null> {
     return new Observable(observer => {
       const userDocRef = doc(this.firestore, 'users', uid);
@@ -37,7 +37,7 @@ export class FirestoreService {
         if (snapshot.exists()) {
           const userData = snapshot.data() as UserData;
           observer.next(userData);
-          // Обновляем состояние приложения
+          // Update the app state with the latest user data
           this.appState.setUserData(userData);
         } else {
           observer.next(null);
@@ -45,45 +45,35 @@ export class FirestoreService {
         }
       }, (error) => {
         console.error("Firestore user data listener error:", error);
-        // Не пробрасываем ошибку дальше, чтобы не ломать UI, просто логируем
-        // observer.error(error); 
+        // observer.error(error);
       });
       return () => unsubscribe();
     });
   }
 
-  // Создание данных пользователя при первом входе
+  // Create user data - in the new architecture, this is triggered by a Cloud Function onUserCreated.
   async createUserData(uid: string, email: string): Promise<void> {
-    // В новой архитектуре создание пользователя осуществляется через Cloud Function onUserCreated.
-    // Клиентский код просто ждет создания документа или обновляет lastLogin, если пользователь уже существует.
     
     const userDocRef = doc(this.firestore, 'users', uid);
     
     try {
-      // Попытка получить документ.
-      // Если он есть - отлично, обновляем lastLogin (если позволяет security rule).
-      // Если нет - ждем пока создаст Cloud Function или ничего не делаем,
-      // так как security rules теперь запрещают клиенту создавать пользователя (allow create: if false).
       
       const existingDoc = await getDoc(userDocRef);
       
       if (existingDoc.exists()) {
         await this.updateLastLogin(uid);
       } else {
-        // Документа нет, и клиент не может его создать.
-        // Cloud Function должна была сработать на создание Auth User.
-        // Здесь можно добавить небольшую задержку и ретрай, если нужно, но обычно это не требуется,
-        // так как подписка getUserData$ сама получит данные, когда они появятся.
+        // Document does not exist, but we expect the Cloud Function to create it shortly.
+          // We can either wait or just log and return.
         console.log("User document does not exist yet. Waiting for Cloud Function to create it.");
       }
     } catch (error) {
-      // Игнорируем ошибки прав доступа, так как мы могли попытаться записать что-то, что нельзя
+
       console.warn("Operation restricted by security rules (likely expected):", error);
     }
   }
 
-  // Обновление данных пользователя
-  // Используем setDoc с merge: true вместо updateDoc, чтобы избежать ошибок "No document to update"
+  // Update user data
   async updateUserData(uid: string, data: Partial<UserData>): Promise<void> {
     const userDocRef = doc(this.firestore, 'users', uid);
     try {
@@ -97,18 +87,17 @@ export class FirestoreService {
     }
   }
 
-  // Обновление времени последнего входа
+  // Update last login time
   async updateLastLogin(uid: string): Promise<void> {
     const now = new Date().toISOString();
     try {
       await this.updateUserData(uid, { lastLogin: now } as Partial<UserData>);
     } catch (error) {
-      // Это может быть ошибкой прав доступа, если мы запретили обновление некоторых полей
       console.warn("Failed to update last login (might be restricted):", error);
     }
   }
 
-  // Методы из dashboard.js - работа с чатами
+  // Method to get chat history for a user
   getChatHistory$(uid: string): Observable<Chat[]> {
     return new Observable(observer => {
       const chatsRef = collection(this.firestore, 'users', uid, 'chats');
@@ -123,14 +112,12 @@ export class FirestoreService {
         this.appState.setChats(chats);
       }, (error) => {
         console.error("Firestore chat history listener error:", error);
-        // Здесь ошибка может быть из-за отсутствия индекса или прав.
-        // Если прав нет, ничего не поделаешь, но если индекс - его надо создать.
       });
       return () => unsubscribe();
     });
   }
 
-  // Создание нового чата
+  // Create a new chat
   async createChat(uid: string, chat: Omit<Chat, 'id'>): Promise<string> {
     const chatsRef = collection(this.firestore, 'users', uid, 'chats');
     const chatData = {
@@ -141,7 +128,7 @@ export class FirestoreService {
     return docRef.id;
   }
 
-  // Обновление чата
+  // Update chat metadata
   async updateChat(uid: string, chatId: string, data: Partial<Chat>): Promise<void> {
     const chatDocRef = doc(this.firestore, 'users', uid, 'chats', chatId);
     await updateDoc(chatDocRef, {
@@ -150,13 +137,13 @@ export class FirestoreService {
     });
   }
 
-  // Удаление чата
+  // Delete a chat
   async deleteChat(uid: string, chatId: string): Promise<void> {
     const chatDocRef = doc(this.firestore, 'users', uid, 'chats', chatId);
     await deleteDoc(chatDocRef);
   }
 
-  // Получение конкретного чата
+  // Get a specific chat by ID
   getChat$(uid: string, chatId: string): Observable<Chat | null> {
     return new Observable(observer => {
       const chatDocRef = doc(this.firestore, 'users', uid, 'chats', chatId);
@@ -171,7 +158,7 @@ export class FirestoreService {
     });
   }
 
-  // Обновление сообщений в чате
+  // Update chat messages
   async updateChatMessages(uid: string, chatId: string, messages: Chat['messages']): Promise<void> {
     const chatDocRef = doc(this.firestore, 'users', uid, 'chats', chatId);
     await updateDoc(chatDocRef, {

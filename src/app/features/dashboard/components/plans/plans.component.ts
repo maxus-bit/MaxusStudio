@@ -5,8 +5,6 @@ import { SubscriptionService } from '../../../../core/services/subscription.serv
 import { Plan } from '../../../../core/models/subscription.model';
 import { PricingCardComponent } from '../../../../shared/components/pricing-card/pricing-card.component';
 import { PaymentConfirmationModalComponent, PlanDetails } from '../../../../shared/components/payment-confirmation-modal/payment-confirmation-modal.component';
-// Удаляем старый ModalComponent, если он больше не нужен для других целей
-// import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-plans',
@@ -31,13 +29,11 @@ export class PlansComponent implements OnInit {
   }
 
   toggleBilling() {
-    // isAnnual уже обновляется через ngModel в шаблоне
   }
 
   onPlanSelected(plan: Plan) {
     const price = this.isAnnual ? plan.annualPrice : plan.monthlyPrice;
-    
-    // Преобразуем в PlanDetails для модалки
+
     this.selectedPlan = {
       id: plan.id,
       name: plan.name,
@@ -57,10 +53,7 @@ export class PlansComponent implements OnInit {
     
     this.paymentProcessing = true;
     
-    // В реальном приложении здесь будет вызов API для создания сессии Stripe
-    // Используем functions/index.js -> createPortalSession (или checkoutSession)
-    
-    // Имитация задержки
+    // Simulate payment processing delay
     setTimeout(() => {
         console.log(`Processing payment for ${this.selectedPlan?.name}`);
         this.paymentProcessing = false;

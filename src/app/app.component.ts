@@ -76,7 +76,7 @@ import { filter, take } from 'rxjs/operators';
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #050505; /* Default dark */
+      background-color: #050505;
       z-index: 10000;
       display: flex;
       align-items: center;
@@ -352,19 +352,15 @@ export class AppComponent implements OnInit {
   private authService = inject(AuthService);
 
   constructor() {
-    // Определяем, какую страницу мы загружаем
     const path = window.location.pathname;
-    // Считаем дашбордом все, что начинается с /dashboard или /chat
     this.isDashboard = path.startsWith('/dashboard') || path.startsWith('/chat');
   }
 
   ngOnInit() {
-    // Ждем полной инициализации авторизации
     this.authService.authCheckComplete$.pipe(
       filter(complete => complete),
       take(1)
     ).subscribe(() => {
-        // Даем немного времени для отработки гардов и анимации
         setTimeout(() => {
              this.isLoading = false;
         }, 500);

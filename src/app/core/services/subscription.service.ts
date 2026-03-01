@@ -19,7 +19,7 @@ export class SubscriptionService {
   private functions = inject(Functions);
   private auth = inject(AuthService);
 
-  // --- КОНФИГУРАЦИЯ ЦЕН STRIPE ---
+  // --- Configuration prices Stripe ---
   private readonly PRICE_IDS = {
     monthly: {
       basic: 'price_1SsKj73OhZaczFnLGEiyalX1', 
@@ -39,9 +39,7 @@ export class SubscriptionService {
     return PLANS;
   }
 
-  /**
-   * Начинает процесс оплаты (переход на Stripe Checkout)
-   */
+  // --- Start checkout in Stripe ---
   async startCheckout(plan: 'basic' | 'pro' | 'ultra', billing: 'monthly' | 'annual'): Promise<void> {
     const user = this.auth.currentUser;
     if (!user) throw new Error('User must be logged in');
@@ -49,8 +47,7 @@ export class SubscriptionService {
     const priceId = this.PRICE_IDS[billing][plan];
     if (!priceId) throw new Error('Price ID not configured for this plan');
 
-    // Создаем документ в коллекции customers/{uid}/checkout_sessions
-    // Расширение Stripe слушает эту коллекцию и создаст сессию
+    // Create a new checkout session in Firestore
     const sessionsRef = collection(this.firestore, 'customers', user.uid, 'checkout_sessions');
     
     const docRef = await addDoc(sessionsRef, {
@@ -61,7 +58,7 @@ export class SubscriptionService {
       mode: 'subscription'
     });
 
-    // Слушаем изменения в этом документе, чтобы получить redirect URL
+    // Listen for changes to the session document to get the Stripe checkout URL
     return new Promise((resolve, reject) => {
       const unsubscribe = onSnapshot(docRef, (snap) => {
         const data = snap.data() as CheckoutSession;
@@ -71,16 +68,14 @@ export class SubscriptionService {
         }
         if (data?.url) {
           unsubscribe();
-          window.location.href = data.url; // Перенаправляем пользователя на Stripe
+          window.location.href = data.url; // Redirect to Stripe checkout
           resolve();
         }
       });
     });
   }
 
-  /**
-   * Открывает портал управления подпиской (смена карты, отмена)
-   */
+  // --- Open Stripe billing portal (Change cards and cancel sub...) ---
   async openBillingPortal(): Promise<void> {
     try {
       const createPortalSession = httpsCallable(this.functions, 'createPortalSession');

@@ -25,7 +25,6 @@ bootstrapApplication(AppComponent, {
     // App Check Setup
     provideAppCheck(() => {
       const app = getApp();
-      // ID (Site Key) из консоли reCAPTCHA Enterprise: 6LdX11QsAAAAALlFa3Q_QReRXAPcQNcko9iAqOUH
       const provider = new ReCaptchaEnterpriseProvider('6LdX11QsAAAAALlFa3Q_QReRXAPcQNcko9iAqOUH'); 
       return initializeAppCheck(app, { provider, isTokenAutoRefreshEnabled: true });
     }),

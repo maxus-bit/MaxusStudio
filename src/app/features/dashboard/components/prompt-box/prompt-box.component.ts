@@ -20,8 +20,8 @@ export class PromptBoxComponent {
 
   @Output() generate = new EventEmitter<{ prompt: string; images: string[]; model: 'v1' | 'v2' }>();
   @Output() modelChanged = new EventEmitter<'v1' | 'v2'>();
-  @Output() imageAttached = new EventEmitter<string>(); // Emits single new image
-  @Output() imageRemoved = new EventEmitter<number>(); // Emits index
+  @Output() imageAttached = new EventEmitter<string>();
+  @Output() imageRemoved = new EventEmitter<number>();
   @Output() goToPlans = new EventEmitter<void>();
 
   @ViewChild('promptInput') promptInput?: ElementRef<HTMLTextAreaElement>;
@@ -61,7 +61,6 @@ export class PromptBoxComponent {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
-    // Logic: Limit addition of images for users who have 3 and less generations only 2 images
     const maxImages = this.userCredits <= 3 ? 2 : 10;
     const currentCount = this.attachedImages.length;
     
@@ -106,12 +105,12 @@ export class PromptBoxComponent {
   }
 
   selectModel(model: 'v1' | 'v2') {
-    // Разрешаем выбор V2 только если у пользователя есть подписка (basic, pro, ultra)
-    // или если это V1 (он доступен всем)
+    // Allow choice only this users status: (basic, pro, ultra)
+    // or if this V1 set default for all users
     if (model === 'v2') {
       const isSubscribed = this.userData?.subscriptionType && ['basic', 'pro', 'ultra'].includes(this.userData.subscriptionType);
       
-      // Если подписки нет - нельзя выбрать V2
+      // If user is not subscribed to any plan, they can only select v1.
       if (!isSubscribed) {
         return;
       }

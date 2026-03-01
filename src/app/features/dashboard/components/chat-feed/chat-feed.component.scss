@@ -37,7 +37,7 @@
       font-size: 3rem;
       margin-bottom: 15px;
       font-weight: 700;
-      word-break: break-word; // Add this to handle long names
+      word-break: break-word;
     }
 
     h2 {
@@ -57,7 +57,7 @@
     justify-content: flex-end;
 
     .message-content {
-      background-color: #ff3333; /* 🔥 ИЗМЕНЕНИЕ: Тот самый цвет для сообщений пользователя */
+      background-color: #ff3333;
       color: #fff;
       padding: 12px 18px;
       border-radius: 18px 18px 4px 18px;
@@ -128,21 +128,20 @@
   gap: 8px;
   opacity: 0;
   transition: 0.3s ease;
-  transform: translateY(10px); /* Скрываем чуть ниже */
+  transform: translateY(10px);
 }
 
-/* 🔥 ИЗМЕНЕНИЕ: Показываем и поднимаем кнопки при наведении */
 .ai-image-card:hover .ai-actions-overlay {
   opacity: 1;
   transform: translateY(0);
 }
 
 .action-circle-btn {
-  width: 34px; /* 🔥 Чуть компактнее, как в My Creations */
+  width: 34px;
   height: 34px;
   border-radius: 50%;
   border: none;
-  background: rgba(0, 0, 0, 0.7); /* 🔥 Более темный фон, как в My Creations */
+  background: rgba(0, 0, 0, 0.7);
   color: white;
   backdrop-filter: blur(4px);
   cursor: pointer;
@@ -156,7 +155,6 @@
     font-size: 0.9rem;
   }
 
-  /* 🔥 ИЗМЕНЕНИЕ: Стиль при наведении как в My Creations */
   &:hover {
     background: #fff;
     color: #000;
@@ -216,18 +214,18 @@
 // Mobile styles
 @media (max-width: 768px) {
   .chat-feed {
-    padding: 20px 5%; // Reduce padding on mobile
+    padding: 20px 5%;
   }
 
   .chat-welcome {
     .welcome-content {
       h1 {
-        font-size: 1.8rem; // Smaller font for mobile
+        font-size: 1.8rem;
         margin-bottom: 10px;
       }
 
       h2 {
-        font-size: 1.1rem; // Smaller subtitle
+        font-size: 1.1rem;
       }
     }
   }
@@ -235,7 +233,7 @@
   .message {
     &.user-message .message-content,
     &.ai-message .message-content {
-      max-width: 85%; // Allow messages to take more width on mobile
+      max-width: 85%;
     }
   }
 }

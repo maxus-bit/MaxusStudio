@@ -12,4 +12,3 @@ export class LoadingScreenComponent {
   @Input() visible: boolean = false;
   @Input() message: string = 'Loading...';
 }
-

@@ -1,17 +1,12 @@
 /* =========================================
-   1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И СБРОС (VARIABLES & RESET)
+   1. VARIABLES & RESET
    ========================================= */
 :root {
     --bg-color: #050505;
-    /* Основной фон */
     --sidebar-bg: #0a0a0a;
-    /* Фон меню */
     --card-bg: #111111;
-    /* Фон карточек */
     --primary-red: #ff2a4d;
-    /* Акцент */
     --primary-purple: #9d00ff;
-    /* Pro Акцент */
     --text-white: #ffffff;
     --text-grey: #888888;
     --border-color: #222;
@@ -197,7 +192,7 @@
 }
 
 /* =========================================
-   2. САЙДБАР И МЕНЮ (SIDEBAR)
+   2. SIDEBAR & MENU
    ========================================= */
 .sidebar {
     width: 280px;
@@ -209,11 +204,8 @@
     padding: 30px;
     flex-shrink: 0;
     z-index: 100;
-    /* Подняли Z-index */
     transition: transform 0.3s ease;
-    /* Добавили плавность для мобилки */
     overflow-y: auto;
-    /* Добавляем скролл если контент не помещается */
 }
 
 .logo-area {
@@ -226,7 +218,7 @@
     gap: 10px;
 }
 
-/* Навигация */
+/* Navigation */
 .menu {
     display: flex;
     flex-direction: column;
@@ -255,7 +247,7 @@
     color: var(--primary-red);
 }
 
-/* Секция истории (в сайдбаре) */
+/* History section */
 .history-section {
     margin-top: 40px;
     flex-grow: 1;
@@ -284,18 +276,13 @@
     border-left: 2px solid transparent;
 }
 
-/* --- СТИЛИ ДЛЯ АКТИВНОГО ЧАТА В ИСТОРИИ --- */
-/* Активный чат в меню */
+/* --- STYLES FOR ACTIVE CHAT IN HISTORY --- */
 .history-item.active {
     background-color: rgba(255, 42, 77, 0.1);
-    /* Светлее фона */
     color: white !important;
-    /* Белый текст */
     padding-left: 10px !important;
-    /* Отступ */
 }
 
-/* Убираем прозрачность или меняем цвет при наведении на активный */
 .history-item.active:hover {
     background-color: #222;
 }
@@ -336,14 +323,11 @@
     border-top: 1px solid var(--border-color);
 }
 
-
-
-/* --- КНОПКА NEW CHAT --- */
+/* --- BUTTON NEW CHAT --- */
 .new-chat-wrapper {
     margin-top: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #1a1a1a;
-    /* Разделитель */
 }
 
 .new-chat-btn {
@@ -377,10 +361,8 @@
     transform: scale(0.98);
 }
 
-
-
 /* =========================================
-   3. ГЛАВНАЯ ОБЛАСТЬ И ШАПКА (MAIN CONTENT)
+   3. MAIN CONTENT
    ========================================= */
 .main-content {
     flex-grow: 1;
@@ -395,7 +377,6 @@
     height: 80px;
     display: flex;
     justify-content: flex-end;
-    /* По умолчанию справа */
     align-items: center;
     padding: 0 40px;
     flex-shrink: 0;
@@ -428,21 +409,17 @@
     border: 1px solid #333;
 }
 
-/* Выпадающее меню профиля */
 .profile-wrapper {
     position: relative;
 }
 
-/* Выпадающее меню профиля */
 .user-dropdown {
-    /* Убедимся, что оно скрыто по умолчанию */
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     pointer-events: none;
-    /* Чтобы не кликалось, пока скрыто */
 
-    /* Позиционирование */
+    /* Position */
     position: absolute;
     top: 60px;
     right: 0;
@@ -452,7 +429,6 @@
     border-radius: 10px;
     padding: 10px;
     z-index: 1000;
-    /* Поверх всего */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     transition: all 0.2s ease;
 }
@@ -462,7 +438,6 @@
     visibility: visible;
     transform: translateY(0);
     pointer-events: all;
-    /* Теперь можно кликать */
 }
 
 .dropdown-close {
@@ -497,13 +472,9 @@
     border-bottom: 1px solid #333;
     margin-bottom: 5px;
 
-    /* ВАЖНО: Обрезаем длинную почту с троеточием */
     white-space: nowrap;
-    /* Текст в одну строку */
     overflow: hidden;
-    /* Скрываем, что вылезает */
     text-overflow: ellipsis;
-    /* Добавляем "..." в конце */
 }
 
 .dropdown-item {
@@ -527,9 +498,8 @@
     margin: 5px 0;
 }
 
-
 /* =========================================
-   4. ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК (TABS)
+   4. LOGIC SWITCH TABS
    ========================================= */
 .content-section {
     display: none;
@@ -653,9 +623,8 @@
     transform: translateX(30px);
 }
 
-
 /* =========================================
-   5. СЕКЦИЯ HOME (ГЕНЕРАТОР)
+   5. HOME SECTION (CHAT INTERFACE)
    ========================================= */
 #section-home.content-section {
     display: none;
@@ -811,51 +780,39 @@
     color: white;
 }
 
-/* --- ГРАДИЕНТНЫЙ ТЕКСТ ДЛЯ ИМЕНИ --- */
+/* --- GRADIENT TEXT FOR NAME --- */
 #userName {
-    /* 1. Задаем градиент (от белого к серому) */
     background: linear-gradient(130deg, #ffffff 20%, #555552 100%);
 
-    /* 2. Обрезаем фон по контуру букв */
     -webkit-background-clip: text;
     background-clip: text;
 
-    /* 3. Делаем сам текст прозрачным, чтобы было видно фон */
     -webkit-text-fill-color: transparent;
     color: transparent;
 
-    /* Опционально: чуть жирнее, чтобы градиент был заметнее */
     font-weight: 800;
 }
 
 
 /* =========================================
-   6. ГАЛЕРЕЯ И КАРТОЧКИ (CREATIONS)
+   6. GALLERY SECTION (CREATIONS)
    ========================================= */
-
-/* 🔥 ИСПРАВЛЕНИЕ: Добавили #myCreationsGrid и уменьшили размер */
 .image-grid,
 #myCreationsGrid,
 .gallery-grid {
     display: grid;
-    /* minmax(220px, 1fr) - это размер карточки.
-       Чем меньше число (например 200px), тем меньше картинки.
-       Было 280px (слишком большие), стало 220px (аккуратные). */
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
     width: 100%;
     padding-bottom: 50px;
-    /* Отступ снизу, чтобы не прилипало */
 }
 
 .gallery-card {
     background: #111;
     border-radius: 12px;
-    /* Чуть меньше скругление */
     overflow: hidden;
     position: relative;
     aspect-ratio: 16/9;
-    /* Сохраняем пропорции превью */
     border: 1px solid #222;
     transition: 0.3s;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -895,20 +852,17 @@
 
 .prompt-text {
     font-size: 0.85rem;
-    /* Текст чуть меньше */
     color: #e0e0e0;
     margin-bottom: 35px;
-    /* Место для кнопок */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
-    /* Максимум 2 строки текста */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* --- КНОПКИ НА КАРТОЧКЕ --- */
+/* --- BUTTONS IN CARDS --- */
 .card-actions {
     position: absolute;
     bottom: 10px;
@@ -928,7 +882,6 @@
 
 .card-actions button {
     width: 34px;
-    /* Кнопки чуть компактнее */
     height: 34px;
     border-radius: 50%;
     border: none;
@@ -945,14 +898,14 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Кнопка скачивания */
+/* Button download */
 .card-actions .download-btn:hover {
     background-color: #fff;
     color: #000;
     transform: scale(1.1);
 }
 
-/* Кнопка удаления */
+/* Button delete */
 .card-actions .delete-btn:hover {
     background-color: #ff2a4d;
     color: white;
@@ -964,11 +917,8 @@
     transform: scale(0.95);
 }
 
-
-
-
 /* =========================================
-   7. СЕКЦИЯ PLANS (ТАРИФЫ)
+   7. SECTION PLANS (PRICING)
    ========================================= */
 #section-plans {
     align-items: center;
@@ -999,7 +949,7 @@
     text-align: center;
 }
 
-/* Карточка тарифа */
+/* Card pricing */
 .card {
     background-color: var(--card-bg);
     padding: 30px;
@@ -1051,7 +1001,7 @@
 }
 
 
-/* Список функций */
+/* Functions list */
 .features {
     list-style: none;
 }
@@ -1073,7 +1023,7 @@
     color: #444;
 }
 
-/* Кнопки внутри тарифов */
+/* Buttons inside pricing */
 .btn-full,
 .btn-purple {
     width: 100%;
@@ -1107,15 +1057,13 @@
     transform: translateY(-2px);
 }
 
-/* --- СТИЛИ ДЛЯ PRO КАРТЫ --- */
+/* --- STYLES FOR PRO CARD --- */
 .card.pro {
     border: 2px solid var(--primary-purple);
     box-shadow: 0 0 20px rgba(157, 0, 255, 0.3);
     transform: scale(1.05);
-    /* Немного больше остальных */
     z-index: 2;
     overflow: visible;
-    /* Чтобы бейджик не обрезался */
 }
 
 .card.pro:hover {
@@ -1139,7 +1087,7 @@
 }
 
 /* =========================================
-   8. ОБЩИЕ СТИЛИ КНОПОК (GLOBAL BUTTONS)
+   8. GLOBAL BUTTONS STYLES
    ========================================= */
 .btn {
     padding: 10px 25px;
@@ -1188,7 +1136,7 @@
 }
 
 /* =========================================
-   9. КОНТЕКСТНОЕ МЕНЮ (ПКМ)
+   9. CONTEXT MENU (RCM)
    ========================================= */
 .context-menu {
     position: fixed;
@@ -1235,75 +1183,59 @@
 
 
 /* =========================================
-   10. SCROLLBAR CUSTOMIZATION (КРАСИВЫЙ СКРОЛЛ)
+   10. SCROLLBAR CUSTOMIZATION
    ========================================= */
-
-/* Делаем полосу прокрутки тонкой и темной для всего сайта */
 ::-webkit-scrollbar {
     width: 8px;
-    /* Ширина скролла */
     height: 8px;
-    /* Высота (для горизонтального) */
 }
 
-/* Фон под скроллом (трек) */
+/* Background scrollbar */
 ::-webkit-scrollbar-track {
     background: var(--bg-color);
 }
 
-/* Сам ползунок */
+/* Scrollbar webkit */
 ::-webkit-scrollbar-thumb {
     background-color: #333;
-    /* Темно-серый */
     border-radius: 4px;
-    /* Скругленные края */
 }
 
-/* Ползунок при наведении */
+/* Scrollbal thumb */
 ::-webkit-scrollbar-thumb:hover {
     background-color: #555;
 }
 
-/* Отступы для секций (кроме home) */
 .content-section:not(#section-home) {
     padding: 40px;
     padding-bottom: 100px;
     overflow-x: hidden;
 }
 
-/* Фикс для контейнера цен, чтобы PRO карта не вызывала скролл */
 .pricing-container {
     padding: 40px;
-    /* Даем место для анимации увеличения */
     margin: 0 -20px;
-    /* Компенсация, чтобы визуально было по центру */
     width: calc(100% + 40px);
 }
 
 
 
 /* =========================================
-   5. СЕКЦИЯ HOME (РЕЖИМ ЧАТА) - FIXED
+   1.1 SECTION HOME - FIXED
    ========================================= */
-
-/* Главный контейнер раздела */
 #section-home.chat-mode {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    /* На всю высоту экрана */
     overflow: hidden;
-    /* Скрываем скролл родителя */
     position: relative;
     padding: 0;
 
-    /* 🔥 FIX: Важно! Убираем центрирование родителя.
-       Мы будем управлять положением через flex-grow у детей */
     justify-content: flex-end;
     align-items: stretch;
 }
 
-/* 1. ПРИВЕТСТВИЕ (Hi User) */
+/* WELCOME (Hi user) */
 .chat-welcome {
     display: flex;
     flex-direction: column;
@@ -1330,9 +1262,8 @@
     font-weight: 400;
 }
 
-/* 2. ЛЕНТА ЧАТА */
+/* CHAT FEED */
 .chat-feed {
-    /* 🔥 FIX: Тоже растягивается, если активно */
     flex-grow: 1;
     flex-shrink: 1;
     min-height: 0;
@@ -1342,7 +1273,6 @@
     padding: 30px 10%;
     padding-bottom: 20px;
     display: flex;
-    /* Изменено: теперь всегда flex, управляется через *ngIf в компоненте */
     flex-direction: column;
     gap: 30px;
     width: 100%;
@@ -1351,12 +1281,10 @@
     scroll-behavior: smooth;
 }
 
-/* Класс active добавляется JS-ом (если используется) или просто display: block */
 .chat-feed.active {
     display: flex;
 }
 
-/* Скроллбар для чата */
 .chat-feed::-webkit-scrollbar {
     width: 6px;
 }
@@ -1368,10 +1296,8 @@
 
 
 /* =========================================
-   FIXED PROMPT BOX STYLES
+   1.2 FIXED PROMPT BOX STYLES
    ========================================= */
-
-/* Контейнер ввода (прижат к низу) */
 .prompt-container-fixed {
     margin-top: auto;
     flex-shrink: 0;
@@ -1383,7 +1309,7 @@
     position: relative;
 }
 
-/* Сама коробка */
+/* Prompt box */
 .prompt-box {
     width: 100%;
     max-width: 700px;
@@ -1398,7 +1324,7 @@
     margin: 0 auto;
 }
 
-/* 2. ТЕКСТОВОЕ ПОЛЕ */
+/* Text prompt */
 #promptInput {
     width: 100%;
     background: transparent;
@@ -1408,10 +1334,9 @@
     resize: none;
     outline: none;
     height: 50px;
-    /* Фиксированная высота */
 }
 
-/* 3. НИЖНЯЯ ПАНЕЛЬ (КНОПКИ) */
+/* Down panel buttons */
 .prompt-actions {
     display: flex;
     justify-content: space-between;
@@ -1421,22 +1346,19 @@
     border-top: 1px solid #2a2a2a;
 }
 
-/* Группа инструментов слева */
 .tools {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Обертка кнопки (для позиционирования меню) */
 .tool-wrapper {
     position: relative;
-    /* Меню будет позиционироваться относительно этого блока */
     display: flex;
     align-items: center;
 }
 
-/* Кнопки инструментов */
+/* Tool buttons */
 .tool-btn {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid transparent;
@@ -1457,11 +1379,10 @@
     color: white;
 }
 
-/* 4. ВЫПАДАЮЩЕЕ МЕНЮ (ИСПРАВЛЕНО) */
+/* Dropdown menu */
 .settings-dropdown {
     position: absolute;
     bottom: 45px;
-    /* Поднимаем НАД кнопкой */
     left: 0;
     width: 220px;
     background: #111;
@@ -1469,16 +1390,13 @@
     border-radius: 10px;
     padding: 10px;
     z-index: 999;
-    /* Поверх всего */
 
-    /* Скрыто по умолчанию */
     display: none;
     flex-direction: column;
     gap: 5px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Класс для отображения */
 .settings-dropdown.show {
     display: flex;
 }
@@ -1540,17 +1458,16 @@
 }
 
 /* =========================================
-   СТИЛИ СООБЩЕНИЙ (MESSENGER STYLE)
+   1.3 MESSENGER STYLES
    ========================================= */
 
-/* --- ОБЩАЯ СТРОКА СООБЩЕНИЯ --- */
 .msg-row {
     display: flex;
     width: 100%;
     animation: fadeIn 0.3s ease;
 }
 
-/* --- 1. ЮЗЕР (СПРАВА) --- */
+/* --- USER RIGHT --- */
 .msg-row.user {
     justify-content: flex-end;
 }
@@ -1569,12 +1486,12 @@
     white-space: pre-wrap;
 }
 
-/* --- 2. AI (СЛЕВА) --- */
+/* --- AI LEFT --- */
 .msg-row.ai {
     justify-content: flex-start;
 }
 
-/* Карточка с картинкой */
+/* Cards with images */
 .ai-image-card {
     position: relative;
     border-radius: 16px;
@@ -1591,7 +1508,7 @@
     display: block;
 }
 
-/* Кнопки на картинке */
+/* Buttons in images */
 .ai-actions-overlay {
     position: absolute;
     bottom: 10px;
@@ -1624,7 +1541,7 @@
     background: var(--primary-red);
 }
 
-/* Анимация загрузки */
+/* Upload animation */
 .ai-loading-bubble {
     color: #888;
     font-style: italic;
@@ -1632,8 +1549,6 @@
     align-items: center;
     gap: 10px;
 }
-
-
 
 /* --- MODAL STYLES --- */
 .modal-overlay {
@@ -1670,7 +1585,7 @@
     overflow: hidden;
 }
 
-/* Модальное окно настроек - упрощенный дизайн */
+/* Modal window settings */
 #settingsModal .modal-window {
     width: 600px !important;
     max-width: 600px !important;
@@ -1741,7 +1656,6 @@
     overflow-y: auto;
     width: 100%;
     min-height: 0;
-    /* Позволяет flex-контейнеру правильно работать с overflow */
 }
 
 .settings-content::-webkit-scrollbar {
@@ -1898,7 +1812,7 @@
     min-width: 100px;
 }
 
-/* Стили для модальных окон Delete и Rename */
+/* Styles for Delete & Rename */
 #deleteChatModal .modal-window,
 #renameChatModal .modal-window,
 #deleteAccountModal .modal-window,
@@ -2054,44 +1968,32 @@
     margin: 30px 0;
 }
 
-
-
-
-
-
-/* --- 1. PREVIEW AREA (ИСПРАВЛЕНО) --- */
+/* --- PREVIEW AREA --- */
 .image-preview-area {
     display: flex;
     gap: 10px;
 
-    /* 🔥 По умолчанию: скрыто полностью (без отступов) */
     padding: 0;
     max-height: 0;
     opacity: 0;
 
     overflow-x: auto;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    /* Плавная анимация */
+
     border-bottom: 1px solid transparent;
 }
 
-/* 🔥 Класс добавляется JS-ом: блок раскрывается */
 .image-preview-area.has-images {
     padding: 15px 15px 15px 15px;
-    /* Отступы появляются только здесь */
     max-height: 100px;
-    /* Достаточно места для картинки */
     opacity: 1;
     border-bottom-color: #333;
-    /* Появляется полоска */
     margin-bottom: 10px;
-    /* Отступ до текста */
 }
 
-/* Карточка превью */
+/* Prewiev card */
 .preview-item {
     position: relative;
-    /* Важно для позиционирования картинки внутри */
     width: 60px;
     height: 60px;
     border-radius: 8px;
@@ -2099,11 +2001,9 @@
     flex-shrink: 0;
     overflow: hidden;
     background: #000;
-    /* Фон, если картинка не загрузится */
     animation: fadeInScale 0.3s ease;
 }
 
-/* 🔥 ИСПРАВЛЕНИЕ: Картинка растягивается абсолютно */
 .preview-item img {
     position: absolute;
     top: 0;
@@ -2111,11 +2011,10 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Обрезаем лишнее, сохраняя пропорции */
     z-index: 1;
 }
 
-/* Кнопка удаления */
+/* Delete button */
 .preview-remove {
     position: absolute;
     top: 2px;
@@ -2132,7 +2031,6 @@
     justify-content: center;
     font-size: 10px;
     z-index: 2;
-    /* Поверх картинки */
     transition: 0.2s;
 }
 
@@ -2145,11 +2043,8 @@
     transform: scale(1.1);
 }
 
-
-
-
 /* =========================================
-   TOAST NOTIFICATIONS (УВЕДОМЛЕНИЯ)
+   1.4 TOAST NOTIFICATIONS
    ========================================= */
 
 .toast-container {
@@ -2178,7 +2073,7 @@
     overflow: hidden;
 }
 
-/* Полоска статуса слева */
+/* Left status */
 .toast::before {
     content: '';
     position: absolute;
@@ -2188,12 +2083,11 @@
     width: 4px;
 }
 
-/* Типы уведомлений */
+/* Notification types */
 .toast.error::before {
     background: #ff2a4d;
 }
 
-/* Красный */
 .toast.error i {
     color: #ff2a4d;
 }
@@ -2202,7 +2096,6 @@
     background: #00ff88;
 }
 
-/* Зеленый */
 .toast.success i {
     color: #00ff88;
 }
@@ -2211,12 +2104,11 @@
     background: #0088ff;
 }
 
-/* Синий */
 .toast.info i {
     color: #0088ff;
 }
 
-/* Анимации */
+/* Animations */
 @keyframes slideIn {
     from {
         transform: translateX(100%);
@@ -2242,28 +2134,24 @@
 }
 
 
-/* --- СТИЛИ ДЛЯ КНОПОК ГАЛЕРЕИ (ОБНОВЛЕНИЕ) --- */
+/* --- STYLES FOR BUTTON IN GALLERY --- */
 
-/* Кнопка скачивания */
+/* Download button */
 .card-actions .download-btn:hover {
     background-color: #fff;
     color: #000;
     transform: scale(1.1);
 }
 
-/* Кнопка удаления */
+/* Delete button */
 .card-actions .delete-btn:hover {
     background-color: #ff2a4d;
-    /* Красный акцент */
     color: white;
     transform: scale(1.1) rotate(5deg);
     box-shadow: 0 0 15px rgba(255, 42, 77, 0.6);
 }
 
-
-
-/* --- СТИЛИ ДЛЯ ПУСТОЙ ГАЛЕРЕИ --- */
-
+/* --- STYLES FOR VOID GALLERY --- */
 .empty-state {
     display: flex;
     flex-direction: column;
@@ -2277,7 +2165,6 @@
 .empty-icon {
     font-size: 80px;
     color: #222;
-    /* Очень темный серый, чтобы не отвлекал */
     margin-bottom: 20px;
 }
 
@@ -2295,10 +2182,9 @@
     max-width: 400px;
 }
 
-/* Кнопка "Start Creating" */
+/* Button "Start Creating" */
 .primary-btn {
     background: #ff2a4d;
-    /* Ваш фирменный красный */
     color: #fff;
     border: none;
     padding: 14px 32px;
@@ -2323,7 +2209,7 @@
 }
 
 /* =========================================
-   CHECKOUT MODAL - используем стили из лендинга
+   1.5 CHECKOUT MODAL
    ========================================= */
 #checkoutModal .modal-window {
     background-color: var(--card-bg);
@@ -2383,13 +2269,11 @@
 }
 
 /* =========================================
-   ДОПОЛНЕНИЯ ДЛЯ АДАПТИВА (КНОПКИ И МЕДИА)
+    1.6 MOBILE RESPONSIVE STYLES
    ========================================= */
 
-/* Кнопка "Закрыть меню" внутри сайдбара (скрыта на ПК) */
 .mobile-close-btn {
     display: none;
-    /* Скрыта по умолчанию */
     background: none;
     border: none;
     color: #666;
@@ -2400,10 +2284,8 @@
     cursor: pointer;
 }
 
-/* Кнопка "Бургер" в шапке (скрыта на ПК) */
 .mobile-menu-btn {
     display: none;
-    /* Скрыта по умолчанию */
     background: none;
     border: none;
     color: white;
@@ -2422,7 +2304,6 @@
     cursor: pointer;
 }
 
-/* Затемнение фона */
 .mobile-overlay {
     position: fixed;
     top: 0;
@@ -2442,47 +2323,38 @@
     pointer-events: all;
 }
 
-/* МЕДИА-ЗАПРОСЫ
-   Срабатывают только на экранах уже 768px (планшеты и телефоны)
-*/
+/* MEDIA REQUESTS */
 @media (max-width: 768px) {
 
-    /* Внутри @media (max-width: 768px) */
+    /* @media (max-width: 768px) */
 
     .sidebar {
         position: fixed;
         top: 0;
         bottom: 0;
         left: 0;
-        /* Прижимаем к левому краю */
         width: 85%;
         max-width: 300px;
         background-color: var(--sidebar-bg);
         z-index: 1000;
-        /* ВАЖНО: Больше, чем у .prompt-container-fixed (у него 100) */
         box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
 
-        /* Скрываем сдвигом влево на свою ширину */
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .sidebar.open {
-        /* Возвращаем на место */
         transform: translateX(0);
     }
 
     .sidebar.active {
-        /* Возвращаем на место */
         transform: translateX(0);
     }
 
-    /* Показываем кнопку закрытия внутри меню */
     .mobile-close-btn {
         display: block;
     }
 
-    /* ШАПКА: Показываем бургер */
     .top-header {
         padding: 0 15px;
         justify-content: space-between;
@@ -2496,12 +2368,10 @@
         display: block;
     }
 
-    /* КОНТЕНТ: Уменьшаем отступы */
     .content-section {
         padding: 20px 15px 120px;
     }
 
-    /* ЧАТ: Шрифты и отступы поменьше */
     .chat-welcome h1 {
         font-size: 2rem;
     }
@@ -2523,7 +2393,6 @@
         padding: 10px;
     }
 
-    /* ГАЛЕРЕЯ: Делаем в 1 колонку на узких экранах */
     .image-grid,
     #myCreationsGrid,
     .gallery-grid {
@@ -2531,7 +2400,6 @@
         gap: 15px;
     }
 
-    /* МОДАЛКИ: На весь экран, убираем скругления */
     .modal-window {
         width: 100%;
         height: 100%;
@@ -2539,7 +2407,6 @@
         max-height: none;
     }
 
-    /* Модальное окно настроек на мобильных - полноэкранное */
     #settingsModal .modal-window {
         width: 100% !important;
         max-width: 100% !important;
@@ -2614,7 +2481,6 @@
         width: 100%;
     }
 
-    /* ТАРИФЫ: Вертикально друг под другом */
     .pricing-container {
         width: 100%;
         margin: 0;
@@ -2645,7 +2511,7 @@
         font-size: 0.9rem;
     }
 
-    /* Адаптивные стили для модальных окон Delete и Rename */
+    /* Adaptive styles for phones Delete & Rename */
     #deleteChatModal .modal-window,
     #renameChatModal .modal-window,
     #deleteAccountModal .modal-window,

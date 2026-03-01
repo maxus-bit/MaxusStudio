@@ -24,8 +24,7 @@ export class EmailVerificationModalComponent {
 
   async onResendVerification() {
     try {
-      // Для повторной отправки нужно войти снова
-      // Это будет реализовано через отдельный сервис или компонент
+      // For repeating the resend action
       this.resendVerification.emit();
       this.toastService.info('Verification email will be sent again');
     } catch (error: any) {

@@ -1,8 +1,7 @@
-// Стили для Landing компонента
 @import '../../../styles/variables';
 @import '../../../styles/mixins';
 
-// Payment Modal Styles (Specific for landing)
+// Payment Modal Styles (For landing)
 ::ng-deep app-modal {
   .modal-window {
     background-color: #111 !important;
@@ -129,8 +128,7 @@
   }
 }
 
-// ... rest of the file ...
-// Header стили
+// Header styles
 .header {
   background: transparent;
   display: flex;
@@ -344,11 +342,10 @@
   border: 1px solid #333;
   transition: 0.3s;
   flex-shrink: 0;
-  pointer-events: none; /* Disabling interaction */
+  pointer-events: none;
 }
 
 /* Removed hover effect on images */
-
 .track-left {
   animation: scroll-left 40s linear infinite;
 }
@@ -745,11 +742,11 @@
   }
 
   .btn-glow {
-    width: auto; // Let it adapt or make full width if needed
-    padding: 12px 30px; // Slightly smaller padding
+    width: auto;
+    padding: 12px 30px;
     font-size: 0.9rem;
     max-width: 100%;
-    white-space: normal; // Allow wrap if text is long, though usually not for buttons
+    white-space: normal;
   }
 
   .track img {

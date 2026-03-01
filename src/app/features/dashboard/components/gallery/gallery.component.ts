@@ -66,19 +66,15 @@ export class GalleryComponent implements OnInit, OnDestroy {
       });
     });
 
-    // Сортируем по времени (новые сначала)
+    // Sort images by timestamp
     this.allImages.sort((a, b) => b.timestamp - a.timestamp);
   }
 
-  // Вспомогательная функция для проверки, является ли контент URL картинки
-  // В текущей реализации AI сообщения содержат URL картинки в content
   isImageUrl(content: string): boolean {
     return content.startsWith('http') || content.startsWith('data:image');
   }
 
   onImageClick(image: any) {
-    // Можно открыть модальное окно с деталями или перейти к чату
-    // console.log('Image clicked:', image);
   }
 
   onStartCreating() {

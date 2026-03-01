@@ -7,28 +7,28 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.85); /* Чуть темнее фон */
+  background-color: rgba(0, 0, 0, 0.85);
   z-index: 10000;
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(8px); /* Больше размытия */
+  backdrop-filter: blur(8px);
   animation: fadeIn 0.3s ease forwards;
 }
 
 .modal-window {
-  background-color: #111; /* Явный цвет вместо переменной для контроля */
+  background-color: #111;
   width: 100%;
   max-width: 600px;
   max-height: 80vh;
   padding: 40px;
-  border-radius: 20px; /* Больше скругление */
+  border-radius: 20px;
   border: 1px solid $border-color;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); /* Глубокая тень */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
   overflow-y: auto;
   transform: translateY(20px);
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; /* Плавная анимация */
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .modal-close {
@@ -38,7 +38,7 @@
   background: none;
   border: none;
   color: $text-grey;
-  font-size: 1.5rem; /* Чуть меньше */
+  font-size: 1.5rem;
   cursor: pointer;
   transition: $transition;
   line-height: 1;
@@ -58,7 +58,6 @@
 
 .modal-header {
   margin-bottom: 25px;
-  /* Убрали border-bottom отсюда */
 
   h2 {
     font-size: 2rem;
@@ -78,12 +77,12 @@
   display: flex;
   gap: 20px;
   margin-bottom: 35px;
-  border-bottom: 1px solid #222; /* Тонкая линия */
+  border-bottom: 1px solid #222;
   padding-bottom: 0;
 }
 
 .tab-btn {
-  padding: 0 0 15px 0; /* Отступы только снизу */
+  padding: 0 0 15px 0;
   background: none;
   border: none;
   color: $text-grey;
@@ -128,7 +127,7 @@
   input {
     width: 100%;
     padding: 14px 16px;
-    background-color: #050505; /* Темнее поля ввода */
+    background-color: #050505;
     border: 1px solid #333;
     border-radius: 12px;
     color: $text-white;
@@ -176,9 +175,9 @@
   font-size: 0.95rem;
 
   &:hover {
-    border-color: $primary-red; /* Теперь красный при наведении */
-    color: $primary-red; /* Текст тоже красный */
-    background-color: rgba(255, 42, 77, 0.05); /* Легкий красный фон */
+    border-color: $primary-red;
+    color: $primary-red;
+    background-color: rgba(255, 42, 77, 0.05);
   }
   
   i {
@@ -188,10 +187,10 @@
 
 .danger-zone {
   padding: 25px;
-  background: rgba(255, 42, 77, 0.03); /* Очень легкий фон */
+  background: rgba(255, 42, 77, 0.03);
   border-radius: 16px;
-  border: 1px solid rgba(255, 42, 77, 0.15); /* Тонкая красная граница */
-  margin-top: 50px; /* Отступ побольше */
+  border: 1px solid rgba(255, 42, 77, 0.15);
+  margin-top: 50px;
 
   h3 {
     color: $primary-red;
@@ -208,7 +207,7 @@
   }
 
   .btn-danger {
-    background: rgba(255, 42, 77, 0.1); /* Полупрозрачная кнопка */
+    background: rgba(255, 42, 77, 0.1);
     color: $primary-red;
     border: 1px solid transparent;
     padding: 12px 24px;

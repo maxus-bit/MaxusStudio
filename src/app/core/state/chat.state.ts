@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ChatMessage } from '../models/chat.model';
 
-// Состояние для конкретного чата
+// State management for individual chat sessions
 export interface ChatState {
   messages: ChatMessage[];
   isLoading: boolean;
@@ -79,4 +79,3 @@ export class ChatStateService {
     this.chatStates.get(chatId)!.next(newState);
   }
 }
-

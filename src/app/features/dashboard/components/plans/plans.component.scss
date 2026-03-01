@@ -42,12 +42,12 @@
 
 .discount-badge {
   background: $primary-red;
-  color: #ffffff !important; /* Принудительно ставим белый цвет */
+  color: #ffffff !important;
   font-size: 0.75rem;
   padding: 2px 6px;
   border-radius: 4px;
   margin-left: 5px;
-  font-weight: 700; /* Жирность для лучшей читаемости */
+  font-weight: 700;
 }
 
 /* Switch Toggle Styles */
@@ -87,7 +87,7 @@
 }
 
 input:checked + .slider {
-  background-color: $primary-red; // Changed to red as requested
+  background-color: $primary-red;
 }
 
 input:focus + .slider {
@@ -119,9 +119,9 @@ input:checked + .slider:before {
 // Payment Modal Styles
 .payment-modal-content {
   text-align: center;
-  padding: 0; // 🔥 УБРАЛ ПАДДИНГ, ТАК КАК ОН УЖЕ ЕСТЬ В MODAL-WRAPPER
-  background: transparent; // 🔥 ПРОЗРАЧНЫЙ ФОН, ЧТОБЫ БЫЛ ВИДЕН MODAL BG
-  border-radius: 0; // 🔥 УБРАЛ РАДИУС
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
 }
 
 h3 {
@@ -133,17 +133,17 @@ h3 {
 
 .plan-summary {
   background: rgba(255, 255, 255, 0.03);
-  padding: 25px; // 🔥 ЧУТЬ МЕНЬШЕ (было 30px)
+  padding: 25px;
   border-radius: 16px;
-  margin-bottom: 25px; // 🔥 ЧУТЬ МЕНЬШЕ (было 30px)
+  margin-bottom: 25px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: none; // 🔥 УБРАЛ ТЕНЬ ДЛЯ ЧИСТОТЫ
+  box-shadow: none;
 }
 
 .plan-name {
-  font-size: 1.2rem; // 🔥 ЧУТЬ МЕНЬШЕ (было 1.4rem)
+  font-size: 1.2rem;
   font-weight: 800;
-  color: $primary-red !important; // 🔥 ТЕПЕРЬ КРАСНЫЙ (было $primary-purple)
+  color: $primary-red !important;
   text-transform: uppercase;
   margin-bottom: 6px;
   letter-spacing: 1px;
@@ -151,14 +151,14 @@ h3 {
 
 .plan-billing {
   color: $text-grey;
-  font-size: 0.85rem; // 🔥 ЧУТЬ МЕНЬШЕ
+  font-size: 0.85rem;
   margin-bottom: 15px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .plan-price {
-  font-size: 2.5rem; // 🔥 ЧУТЬ МЕНЬШЕ (было 2.8rem)
+  font-size: 2.5rem;
   font-weight: 800;
   color: $text-white;
   margin-top: 10px;
@@ -172,24 +172,24 @@ h3 {
 
 .payment-actions {
   display: flex;
-  gap: 12px; // 🔥 ЧУТЬ МЕНЬШЕ (было 15px)
+  gap: 12px;
   justify-content: center;
   margin-top: 10px;
 
   button {
-    padding: 12px 20px; // 🔥 БОЛЕЕ КОМПАКТНЫЕ КНОПКИ (было 14px 28px)
-    border-radius: 12px; // 🔥 ЧУТЬ БОЛЬШЕ СКРУГЛЕНИЕ
+    padding: 12px 20px;
+    border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     border: none;
-    font-size: 0.95rem; // 🔥 ЧУТЬ МЕНЬШЕ (было 1rem)
+    font-size: 0.95rem;
     flex: 1;
-    max-width: none; // 🔥 НА ВСЮ ШИРИНУ ВНУТРИ FLEX
+    max-width: none;
 
     &.cancel-btn {
-      background: transparent; // 🔥 ПРОЗРАЧНЫЙ ФОН
-      border: 1px solid rgba(255, 255, 255, 0.15); // 🔥 ТОНКАЯ РАМКА
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: #aaa;
 
       &:hover {
@@ -202,7 +202,7 @@ h3 {
     &.confirm-btn {
       background: $primary-red; 
       color: white;
-      box-shadow: 0 4px 15px rgba(255, 42, 77, 0.2); // 🔥 ЧУТЬ МЕНЬШЕ ТЕНЬ
+      box-shadow: 0 4px 15px rgba(255, 42, 77, 0.2);
 
       &:hover:not(:disabled) {
         transform: translateY(-2px);
@@ -233,7 +233,7 @@ h3 {
   }
   
   .payment-actions {
-    // flex-direction: column-reverse; // 🔥 УБРАЛ, ЛУЧШЕ РЯДОМ НА МОБИЛКАХ ЕСЛИ ВЛЕЗАЮТ
+    flex-direction: column-reverse;
     
     button {
       width: 100%;
